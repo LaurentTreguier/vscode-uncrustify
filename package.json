@@ -5,6 +5,13 @@
     "version": "1.0.0",
     "publisher": "LaurentTreguier",
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/mattiascibien/vscode-uncrustify.git"
+    },
+    "bugs": {
+        "url": "https://github.com/mattiascibien/vscode-uncrustify/issues"
+    },
     "engines": {
         "vscode": "^1.0.0"
     },
