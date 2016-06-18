@@ -1,5 +1,6 @@
 'use strict';
 
+import * as fs from 'fs'
 import * as cp from 'child_process'
 import * as vsc from 'vscode';
 
@@ -16,9 +17,16 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider {
             let path = conf.get('uncrustify.configPath');
 
             if (!path) {
-                vsc.window.showWarningMessage('Uncrustify config file path not set');
-                reject();
-                return;
+                try {
+                    if (process.platform !== 'win32') {
+                        path = '/usr/share/uncrustify/defaults.cfg'
+                        fs.accessSync(path.toString());
+                    }
+                } catch (err) {
+                    vsc.window.showWarningMessage('Uncrustify config file path not set');
+                    reject();
+                    return;
+                }
             }
 
             let output = '';
