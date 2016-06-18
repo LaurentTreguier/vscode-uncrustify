@@ -21,14 +21,8 @@
     "keywords": [
         "uncrustify",
         "format",
-        "C",
-        "C++",
-        "C#",
-        "D",
-        "java",
-        "objective-C",
-        "pawn",
-        "vala"
+        "formatting",
+        "formatter"
     ],
     "activationEvents": [
         "onLanguage:c",
