@@ -7,10 +7,10 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/mattiascibien/vscode-uncrustify.git"
+        "url": "https://github.com/LaurentTreguier/vscode-uncrustify.git"
     },
     "bugs": {
-        "url": "https://github.com/mattiascibien/vscode-uncrustify/issues"
+        "url": "https://github.com/LaurentTreguier/vscode-uncrustify/issues"
     },
     "engines": {
         "vscode": "^1.0.0"
