@@ -2,7 +2,7 @@
     "name": "uncrustify",
     "displayName": "Uncrustify",
     "description": "Code format using uncrustify",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "publisher": "LaurentTreguier",
     "license": "MIT",
     "repository": {
