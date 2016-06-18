@@ -1,0 +1,91 @@
+{
+    "name": "uncrustify",
+    "displayName": "Uncrustify",
+    "description": "Code format using uncrustify",
+    "version": "1.0.0",
+    "publisher": "LaurentTreguier",
+    "license": "MIT",
+    "engines": {
+        "vscode": "^1.0.0"
+    },
+    "categories": [
+        "Languages"
+    ],
+    "keywords": [
+        "uncrustify",
+        "format",
+        "C",
+        "C++",
+        "C#",
+        "D",
+        "java",
+        "objective-C",
+        "pawn",
+        "vala"
+    ],
+    "activationEvents": [
+        "onLanguage:c",
+        "onLanguage:cpp",
+        "onLanguage:d",
+        "onLanguage:java",
+        "onLanguage:objective-c",
+        "onLanguage:pawn",
+        "onLanguage:vala"
+    ],
+    "main": "./out/src/extension",
+    "contributes": {
+        "languages": [
+            {
+                "id": "c"
+            },
+            {
+                "id": "cpp"
+            },
+            {
+                "id": "cs"
+            },
+            {
+                "id": "d"
+            },
+            {
+                "id": "java"
+            },
+            {
+                "id": "objective-c"
+            },
+            {
+                "id": "pawn"
+            },
+            {
+                "id": "vala"
+            }
+        ],
+        "configuration": {
+            "title": "Uncrustify configuration",
+            "properties": {
+                "uncrustify.executablePath": {
+                    "type": "string",
+                    "default": "uncrustify",
+                    "description": "Path to the uncrustify executable"
+                },
+                "uncrustify.configPath": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null,
+                    "description": "Path to the uncrustify configuration file"
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
+        "compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install"
+    },
+    "devDependencies": {
+        "typescript": "^1.8.5",
+        "vscode": "^0.11.0"
+    }
+}
