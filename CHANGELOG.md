@@ -20,3 +20,7 @@ Remove useless files
 ## 1.2.2
 
 Remove another useless file, write changelog
+
+## 1.2.3
+
+Added an icon and a background color for the extension marketplace

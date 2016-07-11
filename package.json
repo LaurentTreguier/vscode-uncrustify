@@ -5,6 +5,12 @@
     "version": "1.2.2",
     "publisher": "LaurentTreguier",
     "license": "MIT",
+    "homepage": "https://github.com/LaurentTreguier/vscode-uncrustify",
+    "icon": "images/uncrustify.png",
+    "galleryBanner": {
+        "color": "#1F1F1F",
+        "theme": "dark"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/LaurentTreguier/vscode-uncrustify.git"
