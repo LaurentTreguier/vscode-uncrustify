@@ -4,6 +4,7 @@
 
 Formats your code using [uncrustify](https://github.com/uncrustify/uncrustify).
 Supported languages are :
+- Apex
 - C
 - C++
 - C#
