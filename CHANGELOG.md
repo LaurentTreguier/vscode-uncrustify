@@ -24,3 +24,7 @@ Remove another useless file, write changelog
 ## 1.2.3
 
 Added an icon and a background color for the extension marketplace
+
+## 1.3.0
+
+Added Apex support
