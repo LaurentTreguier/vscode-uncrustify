@@ -8,5 +8,6 @@ export const MODES = [
     'java',
     'objective-c',
     'pawn',
-    'vala'
+    'vala',
+    'apex'
 ];

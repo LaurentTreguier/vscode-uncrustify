@@ -66,5 +66,6 @@ const languageMap = {
     'java': 'JAVA',
     'objective-c': 'OC',
     'pawn': 'PAWN',
-    'vala': 'VALA'
+    'vala': 'VALA',
+    'apex': 'APEX'
 };
