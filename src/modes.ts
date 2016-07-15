@@ -1,6 +1,7 @@
 'use strict';
 
 export const MODES = [
+    'apex',
     'c',
     'cpp',
     'cs',
@@ -8,6 +9,5 @@ export const MODES = [
     'java',
     'objective-c',
     'pawn',
-    'vala',
-    'apex'
+    'vala'
 ];

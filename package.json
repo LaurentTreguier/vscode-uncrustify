@@ -31,14 +31,14 @@
         "formatter"
     ],
     "activationEvents": [
+        "onLanguage:apex",
         "onLanguage:c",
         "onLanguage:cpp",
         "onLanguage:d",
         "onLanguage:java",
         "onLanguage:objective-c",
         "onLanguage:pawn",
-        "onLanguage:vala",
-        "onLanguage:apex"
+        "onLanguage:vala"
     ],
     "main": "./out/src/extension",
     "contributes": {

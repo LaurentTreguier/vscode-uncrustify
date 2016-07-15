@@ -7,6 +7,6 @@ import Formatter from './formatter';
 export function activate(context: vsc.ExtensionContext) {
     let subscribtion = vsc.languages.registerDocumentFormattingEditProvider(MODES, new Formatter());
     context.subscriptions.push(subscribtion);
-}
+};
 
-export function deactivate() { }
+export function deactivate() { };

@@ -56,9 +56,10 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider {
             uncrustify.stdin.end();
         });
     }
-}
+};
 
 const languageMap = {
+    'apex': 'APEX',
     'c': 'C',
     'cpp': 'CPP',
     'cs': 'CS',
@@ -66,6 +67,5 @@ const languageMap = {
     'java': 'JAVA',
     'objective-c': 'OC',
     'pawn': 'PAWN',
-    'vala': 'VALA',
-    'apex': 'APEX'
+    'vala': 'VALA'
 };
