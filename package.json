@@ -37,7 +37,8 @@
         "onLanguage:java",
         "onLanguage:objective-c",
         "onLanguage:pawn",
-        "onLanguage:vala"
+        "onLanguage:vala",
+        "onLanguage:apex"
     ],
     "main": "./out/src/extension",
     "contributes": {
@@ -65,6 +66,9 @@
             },
             {
                 "id": "vala"
+            },
+            {
+                "id": "apex"
             }
         ],
         "configuration": {
