@@ -34,6 +34,7 @@
         "onLanguage:apex",
         "onLanguage:c",
         "onLanguage:cpp",
+        "onLanguage:csharp",
         "onLanguage:d",
         "onLanguage:java",
         "onLanguage:objective-c",
@@ -50,7 +51,7 @@
                 "id": "cpp"
             },
             {
-                "id": "cs"
+                "id": "csharp"
             },
             {
                 "id": "d"
