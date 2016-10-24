@@ -4,7 +4,7 @@ export const MODES = [
     'apex',
     'c',
     'cpp',
-    'cs',
+    'csharp',
     'd',
     'java',
     'objective-c',
