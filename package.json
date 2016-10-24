@@ -2,7 +2,7 @@
     "name": "uncrustify",
     "displayName": "Uncrustify",
     "description": "Code format using uncrustify",
-    "version": "1.3.3",
+    "version": "1.3.4",
     "publisher": "LaurentTreguier",
     "license": "MIT",
     "homepage": "https://github.com/LaurentTreguier/vscode-uncrustify",
