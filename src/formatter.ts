@@ -16,17 +16,16 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider {
             let conf = vsc.workspace.getConfiguration();
             let path = conf.get('uncrustify.configPath');
 
-            if (!path) {
-                try {
-                    if (process.platform !== 'win32') {
-                        path = '/usr/share/uncrustify/defaults.cfg'
-                        fs.accessSync(path.toString());
-                    }
-                } catch (err) {
-                    vsc.window.showWarningMessage('Uncrustify config file path not set');
-                    reject();
-                    return;
+            try {
+                if (!path && process.platform !== 'win32') {
+                    path = '/usr/share/uncrustify/defaults.cfg'
                 }
+
+                fs.accessSync(path.toString());
+            } catch (err) {
+                vsc.window.showErrorMessage('The uncrustify config file path is incorrect');
+                reject();
+                return;
             }
 
             let output = '';
@@ -35,22 +34,22 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider {
                 '-c', path
             ]);
 
-            uncrustify.stdout.on('data', (data) => {
-                output += data;
-            });
-
             uncrustify.on('error', reject);
             uncrustify.on('exit', (code) => {
-                if (code == 0) {
-                    let lastLine = document.lineCount - 1;
-                    let lastCol = document.lineAt(lastLine).text.length;
-                    let range = new vsc.Range(0, 0, lastLine, lastCol);
-
-                    resolve([new vsc.TextEdit(range, output)]);
-                } else {
+                if (code !== 0) {
+                    vsc.window.showErrorMessage('Uncrustify exited with error code ' + code);
                     reject();
                 }
-            })
+            });
+
+            uncrustify.stdout.on('data', (data) => output += data);
+            uncrustify.stdout.on('close', () => {
+                let lastLine = document.lineCount - 1;
+                let lastCol = document.lineAt(lastLine).text.length;
+                let range = new vsc.Range(0, 0, lastLine, lastCol);
+
+                resolve([new vsc.TextEdit(range, output)]);
+            });
 
             uncrustify.stdin.write(document.getText());
             uncrustify.stdin.end();
@@ -62,7 +61,7 @@ const languageMap = {
     'apex': 'APEX',
     'c': 'C',
     'cpp': 'CPP',
-    'cs': 'CS',
+    'csharp': 'CS',
     'd': 'D',
     'java': 'JAVA',
     'objective-c': 'OC',

@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.3.5
+
+The user is now warned whenever the path to `uncrustify.cfg` is incorrect, and the C# language id is correctly set for uncrustify
+
 ### 1.3.4
 
 Actually fixed C# support
