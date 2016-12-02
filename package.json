@@ -22,7 +22,8 @@
         "vscode": "^1.0.0"
     },
     "categories": [
-        "Languages"
+        "Languages",
+        "Formatters"
     ],
     "keywords": [
         "uncrustify",
@@ -92,12 +93,16 @@
         }
     },
     "scripts": {
-        "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
-        "compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
+        "vscode:prepublish": "tsc -p ./",
+        "compile": "tsc -watch -p ./",
         "postinstall": "node ./node_modules/vscode/bin/install"
     },
+    "dependencies": {
+        "meta-pkg": "^0.1.9"
+    },
     "devDependencies": {
-        "typescript": "^1.8.10",
-        "vscode": "^0.11.17"
+        "typescript": "^2.0.10",
+        "vscode": "^1.0.3",
+        "@types/node": "^6.0.51"
     }
 }
