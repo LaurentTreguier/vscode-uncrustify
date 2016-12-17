@@ -16,10 +16,11 @@ Supported languages are :
 
 ## Requirements
 
-Uncrustify has to be installed on your system in order for the extension to work.
+Uncrustify has to be installed on your system in order for the extension to work. However, on most Linux distributions and on macOS (if brew is installed), the installation can be handled by the extension automatically.
 
-- Linux : Uncrustify is available in most distributions as a package in the official repositories
-- Mac OS X : Uncrustify is available through homebrew (see http://macappstore.org/uncrustify)
+If you want or have to install it yourself :
+- Linux : Uncrustify is available in most distributions as a package in the official repositories (`apt/yum install uncrustify` or equivalent)
+- macOS : Uncrustify is available through Homebrew (see http://macappstore.org/uncrustify)
 - Windows : Prebuilt binaries are available on [sourceforge](https://sourceforge.net/projects/uncrustify/files)
 
 If the executable is not in the PATH environment variable, you must set its path in the settings explicitly.
@@ -30,5 +31,5 @@ Thankfully, uncrustify comes with a few preset configurations if you don't want 
 
 This extension contributes the following settings:
 
-* `uncrustify.executablePath`: Path to the uncrustify executable
+* `uncrustify.executablePath`: Path to the uncrustify executable if it's not already in the PATH environment variable
 * `uncrustify.configPath`: Path to the uncrustify configuration file

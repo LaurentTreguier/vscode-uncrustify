@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.4.1
+- The installation progress is now displayed in an OutputChannel
+- The README was updated to reflect the possible automatic installation of uncrustify by the extension
+
 ### 1.4.0
 - The extension now uses Typescript 2
 - On MacOS and Linux, uncrustify can be installed by the extension if it's not detected
