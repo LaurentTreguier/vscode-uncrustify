@@ -8,7 +8,7 @@ import Formatter from './formatter';
 export function activate(context: vsc.ExtensionContext) {
     let choices: string[] = [];
     let installerChoices = {};
-    let message: vsc.Disposable;
+    let output: vsc.OutputChannel;
     let uncrustify = {
         targets: ['uncrustify'],
         backends: {
@@ -32,13 +32,14 @@ export function activate(context: vsc.ExtensionContext) {
             }))
         .then((choice) => {
             if (choice) {
-                message = vsc.window.setStatusBarMessage('Installing uncrustify...');
-                return installerChoices[choice].install();
+                output = vsc.window.createOutputChannel('Uncrustify');
+                output.show(true);
+                return installerChoices[choice].install((chunk) => output.append(chunk.toString()));
             }
         })
         .then((result) => {
             if (result) {
-                message.dispose();
+                output.dispose();
                 vsc.window.showInformationMessage('Uncrustify is now installed');
             }
         });
