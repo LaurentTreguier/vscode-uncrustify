@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.4.2
+- Uncrustify can now be automatically installed on Windows as well
+
 ### 1.4.1
 - The installation progress is now displayed in an OutputChannel
 - The README was updated to reflect the possible automatic installation of uncrustify by the extension

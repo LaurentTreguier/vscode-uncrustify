@@ -14,14 +14,14 @@ Supported languages are :
 - Pawn
 - Vala
 
-## Requirements
+## Installing uncrustify
 
-Uncrustify has to be installed on your system in order for the extension to work. However, on most Linux distributions and on macOS (if brew is installed), the installation can be handled by the extension automatically.
+On most Linux distributions, macOS (if brew is installed) and Windows, uncrustify can be installed by the extension automatically.
 
 If you want or have to install it yourself :
-- Linux : Uncrustify is available in most distributions as a package in the official repositories (`apt/yum install uncrustify` or equivalent)
-- macOS : Uncrustify is available through Homebrew (see http://macappstore.org/uncrustify)
-- Windows : Prebuilt binaries are available on [sourceforge](https://sourceforge.net/projects/uncrustify/files)
+- Linux : Uncrustify is available in most distributions as a package in the official repositories (`sudo apt/yum install uncrustify` or equivalent)
+- macOS : Uncrustify is available through Homebrew (`brew install uncrustify` or see http://macappstore.org/uncrustify)
+- Windows : Prebuilt binaries are available on [sourceforge](https://sourceforge.net/projects/uncrustify/files). You will need to put the executable in your `PATH` variable and you will have to update it manually
 
 If the executable is not in the PATH environment variable, you must set its path in the settings explicitly.
 An uncrustify configuration file should be set, although on Linux and OS X it will try to use a default config file.
