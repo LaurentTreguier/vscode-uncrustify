@@ -98,11 +98,11 @@
         "postinstall": "node ./node_modules/vscode/bin/install"
     },
     "dependencies": {
-        "meta-pkg": "^0.2.1"
+        "meta-pkg": "^0.4.2"
     },
     "devDependencies": {
         "typescript": "^2.1.4",
         "vscode": "^1.0.3",
-        "@types/node": "^6.0.52"
+        "@types/node": "^6.0.54"
     }
 }
