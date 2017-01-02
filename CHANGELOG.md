@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.4.3
+- Fixed a crash occuring when uncrustify is already installed
+
 ### 1.4.2
 - Uncrustify can now be automatically installed on Windows as well
 
