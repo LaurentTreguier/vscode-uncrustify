@@ -53,14 +53,16 @@ export function activate(context: vsc.ExtensionContext) {
             if (choice) {
                 output = vsc.window.createOutputChannel('Uncrustify');
                 output.show(true);
-                return installerChoices[choice].install(output.append.bind(output));
+                return installerChoices[choice]
+                    .install(output.append.bind(output))
+                    .then((alreadyInstalled) => !alreadyInstalled);
             }
-        }).then((alreadyInstalled) => {
+        }).then((didIntall) => {
             if (output) {
                 output.hide();
             }
 
-            if (!alreadyInstalled) {
+            if (didIntall) {
                 vsc.window.showInformationMessage('Uncrustify installed successfully');
             }
         });
