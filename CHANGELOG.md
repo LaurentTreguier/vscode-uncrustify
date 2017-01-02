@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.4.4
+- Actually fixed the bug
+
 ### 1.4.3
 - Fixed a crash occuring when uncrustify is already installed
 
