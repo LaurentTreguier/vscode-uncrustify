@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.5.0
+- Added support for environment variables in the `uncrustify.configPath` option
+
 ### 1.4.4
 - Actually fixed the bug
 
