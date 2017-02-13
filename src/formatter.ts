@@ -14,16 +14,19 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider {
             token.onCancellationRequested(reject);
 
             let conf = vsc.workspace.getConfiguration();
-            let path = conf.get('uncrustify.configPath');
+            let path = conf.get<string>('uncrustify.configPath');
 
             try {
-                if (!path && process.platform !== 'win32') {
-                    path = '/usr/share/uncrustify/defaults.cfg'
+                if (path) {
+                    path = path.replace(/(%\w+%)|(\$\w+)/, (variable) => {
+                        let end = variable.startsWith('%') ? 2 : 1;
+                        return process.env[variable.substr(1, variable.length - end)];
+                    });
                 }
 
                 fs.accessSync(path.toString());
             } catch (err) {
-                vsc.window.showErrorMessage('The uncrustify config file path is incorrect');
+                vsc.window.showErrorMessage('The uncrustify config file path is incorrect: ' + path);
                 reject();
                 return;
             }

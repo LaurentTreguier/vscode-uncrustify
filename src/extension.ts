@@ -11,18 +11,18 @@ export function activate(context: vsc.ExtensionContext) {
     let installerChoices = {};
     let output: vsc.OutputChannel;
     let uncrustify: pkg.Package = {
+        name: 'uncrustify',
         targets: ['uncrustify'],
         backends: {
             packagekit: 'uncrustify',
             brew: 'uncrustify',
             fallback: {
-                name: 'uncrustify',
+                version: {
+                    feed: 'https://sourceforge.net/projects/uncrustify/rss?path=/',
+                    regexp: /uncrustify\/uncrustify-([\d.]+)\/uncrustify-\1-win32\.zip/
+                },
                 win32: {
                     source: 'http://downloads.sourceforge.net/project/uncrustify/uncrustify/uncrustify-%VERSION%/uncrustify-%VERSION%-win32.zip',
-                    version: {
-                        feed: 'https://sourceforge.net/projects/uncrustify/rss?path=/',
-                        regexp: /uncrustify\/uncrustify-([\d.]+)\/uncrustify-\1-win32\.zip/
-                    },
                     bin: 'uncrustify.exe'
                 }
             }
@@ -38,8 +38,8 @@ export function activate(context: vsc.ExtensionContext) {
                 })
                 : Promise.resolve(!installed);
         }).then((shouldInstall) =>
-            shouldInstall ? pkg.getInstallers(uncrustify) : null
-        ).then((installers) => {
+            shouldInstall ? pkg.getInstallers(uncrustify) : null)
+        .then((installers) => {
             if (installers && installers.length) {
                 installers.forEach((installer) => {
                     let choice = 'Install using ' + installer.name;
