@@ -23,7 +23,7 @@ export function activate(context: vsc.ExtensionContext) {
                 },
                 win32: {
                     source: 'http://downloads.sourceforge.net/project/uncrustify/uncrustify/uncrustify-%VERSION%/uncrustify-%VERSION%-win32.zip',
-                    bin: 'uncrustify.exe'
+                    bin: '.'
                 }
             }
         }
@@ -42,7 +42,7 @@ export function activate(context: vsc.ExtensionContext) {
         .then((installers) => {
             if (installers && installers.length) {
                 installers.forEach((installer) => {
-                    let choice = 'Install using ' + installer.name;
+                    let choice = 'Install using ' + installer.prettyName;
                     choices.push(choice);
                     installerChoices[choice] = installer;
                 });
