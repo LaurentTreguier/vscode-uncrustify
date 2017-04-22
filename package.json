@@ -2,7 +2,7 @@
     "name": "uncrustify",
     "displayName": "Uncrustify",
     "description": "Code format using uncrustify",
-    "version": "1.5.1",
+    "version": "1.5.2",
     "publisher": "LaurentTreguier",
     "license": "MIT",
     "homepage": "https://github.com/LaurentTreguier/vscode-uncrustify",
@@ -101,8 +101,8 @@
         "meta-pkg": "^0.6.4"
     },
     "devDependencies": {
-        "typescript": "^2.1.6",
-        "vscode": "^1.0.3",
-        "@types/node": "^7.0.5"
+        "typescript": "^2.2.2",
+        "vscode": "^1.1.0",
+        "@types/node": "^7.0.13"
     }
 }
