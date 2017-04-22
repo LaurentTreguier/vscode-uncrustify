@@ -61,7 +61,7 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider {
 };
 
 const languageMap = {
-    'apex': 'APEX',
+    'apex': 'JAVA',
     'c': 'C',
     'cpp': 'CPP',
     'csharp': 'CS',

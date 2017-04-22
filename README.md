@@ -4,7 +4,6 @@
 
 Formats your code using [uncrustify](https://github.com/uncrustify/uncrustify).
 Supported languages are :
-- Apex
 - C
 - C++
 - C#
@@ -13,6 +12,8 @@ Supported languages are :
 - Objective-C
 - Pawn
 - Vala
+
+Apex, while not officialy supported by uncrustify, is also supported by the extension and will be formatted as if it was Java.
 
 ## Installing uncrustify
 
