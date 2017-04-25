@@ -13,7 +13,7 @@ Supported languages are :
 - Pawn
 - Vala
 
-Apex, while not officialy supported by uncrustify, is also supported by the extension and will be formatted as if it was Java.
+Apex, while not officially supported by uncrustify, is also supported by the extension and will be formatted as if it was Java.
 
 ## Installing uncrustify
 
