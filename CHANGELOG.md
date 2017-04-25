@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.5.4
+- Updated README to add forgotten doc about the "debug mode"
+
 ### 1.5.3
 - Added a "debug mode" that shows a bunch of logs in the uncrustify output channel (see)
 
