@@ -88,6 +88,11 @@
                     ],
                     "default": null,
                     "description": "Path to the uncrustify configuration file"
+                },
+                "uncrustify.debug": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Activates logs for debugging the extension"
                 }
             }
         }

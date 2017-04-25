@@ -2,6 +2,7 @@
 
 import * as vsc from 'vscode';
 import * as pkg from 'meta-pkg';
+import * as logger from './logger';
 import { MODES } from './modes';
 import Formatter from './formatter';
 
@@ -9,7 +10,6 @@ export function activate(context: vsc.ExtensionContext) {
     let message = 'Uncrustify does not seem to be installed';
     let choices: string[] = [];
     let installerChoices = {};
-    let output: vsc.OutputChannel;
     let uncrustify: pkg.Package = {
         name: 'uncrustify',
         targets: ['uncrustify'],
@@ -29,17 +29,25 @@ export function activate(context: vsc.ExtensionContext) {
         }
     };
 
+    logger.dbg('extension started');
+
     pkg.isInstalled(uncrustify)
         .then((installed) => {
+            logger.dbg('uncrustify installed: ' + installed);
             return installed
                 ? pkg.isUpgradable(uncrustify).then((upgradable) => {
                     message = 'Uncrustify can be upgraded';
                     return upgradable;
                 })
                 : Promise.resolve(!installed);
-        }).then((shouldInstall) =>
-            shouldInstall ? pkg.getInstallers(uncrustify) : null)
-        .then((installers) => {
+        }).then((shouldInstall) => {
+            logger.dbg('should uncrustify be installed: ' + shouldInstall);
+            return shouldInstall ? pkg.getInstallers(uncrustify) : null;
+        }).then((installers) => {
+            logger.dbg('installers found: ' + (installers
+                ? installers.map((i) => i.prettyName).join(', ')
+                : 'none'));
+
             if (installers && installers.length) {
                 installers.forEach((installer) => {
                     let choice = 'Install using ' + installer.prettyName;
@@ -50,25 +58,24 @@ export function activate(context: vsc.ExtensionContext) {
                 return vsc.window.showWarningMessage(message, ...choices);
             }
         }).then((choice) => {
+            logger.dbg('installer choice: ' + choice);
+
             if (choice) {
-                output = vsc.window.createOutputChannel('Uncrustify');
-                output.show(true);
+                logger.show();
                 return installerChoices[choice]
-                    .install(output.append.bind(output))
+                    .install((a) => logger.log(a, false))
                     .then((alreadyInstalled) => !alreadyInstalled);
             }
         }).then((didIntall) => {
-            if (output) {
-                output.hide();
-            }
-
             if (didIntall) {
+                logger.dbg('uncrustify installed');
                 vsc.window.showInformationMessage('Uncrustify installed successfully');
             }
         });
 
     let subscribtion = vsc.languages.registerDocumentFormattingEditProvider(MODES, new Formatter());
     context.subscriptions.push(subscribtion);
-}
+    logger.dbg('registered formatter');
+};
 
-export function deactivate() { }
+export function deactivate() { };

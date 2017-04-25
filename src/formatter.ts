@@ -3,6 +3,7 @@
 import * as fs from 'fs'
 import * as cp from 'child_process'
 import * as vsc from 'vscode';
+import * as logger from './logger';
 
 export default class Formatter implements vsc.DocumentFormattingEditProvider {
     public provideDocumentFormattingEdits(
@@ -16,6 +17,8 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider {
             let conf = vsc.workspace.getConfiguration();
             let path = conf.get<string>('uncrustify.configPath');
 
+            logger.dbg('config file: ' + path);
+
             try {
                 if (path) {
                     path = path.replace(/(%\w+%)|(\$\w+)/, (variable) => {
@@ -26,21 +29,25 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider {
 
                 fs.accessSync(path.toString());
             } catch (err) {
+                logger.dbg('config file could not be accessed: ' + err);
                 vsc.window.showErrorMessage('The uncrustify config file path is incorrect: ' + path);
                 reject();
                 return;
             }
 
+            let uncrustifyExecutable = conf.get('uncrustify.executablePath', 'uncrustify');
+            let args = ['-l', languageMap[document.languageId], '-c', path + '.yolo'];
             let output = '';
-            let uncrustify = cp.spawn(conf.get('uncrustify.executablePath', 'uncrustify'), [
-                '-l', languageMap[document.languageId],
-                '-c', path
-            ]);
+            let error = '';
+            let uncrustify = cp.spawn(uncrustifyExecutable, args);
 
+            logger.dbg(`launched: ${uncrustifyExecutable} ${args.join(' ')}`);
             uncrustify.on('error', reject);
             uncrustify.on('exit', (code) => {
+                logger.dbg('uncrustify exited with status: ' + code);
+
                 if (code !== 0) {
-                    vsc.window.showErrorMessage('Uncrustify exited with error code ' + code);
+                    vsc.window.showErrorMessage('Uncrustify exited with error code: ' + code);
                     reject();
                 }
             });
@@ -52,6 +59,14 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider {
                 let range = new vsc.Range(0, 0, lastLine, lastCol);
 
                 resolve([new vsc.TextEdit(range, output)]);
+            });
+
+            uncrustify.stderr.on('data', (data) => error += data);
+            uncrustify.stderr.on('close', () => {
+                logger.dbg('uncrustify exited with error: ' + error);
+                if (error.length) {
+                    vsc.window.showErrorMessage('Uncrustify exited with error message: ' + error);
+                }
             });
 
             uncrustify.stdin.write(document.getText());
