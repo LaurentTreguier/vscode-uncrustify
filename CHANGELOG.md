@@ -1,6 +1,15 @@
 # Changelog
 
-### 1.5.0
+### 1.5.3
+- Added a "debug mode" that shows a bunch of logs in the uncrustify output channel (see)
+
+### 1.5.2
+- Fixed README wrongly asserting that Apex is officially supported by uncrustify (#6)
+
+### 1.5.1
+- Fixed local uncrusify install
+
+## 1.5.0
 - Added support for environment variables in the `uncrustify.configPath` option
 
 ### 1.4.4
@@ -16,7 +25,7 @@
 - The installation progress is now displayed in an OutputChannel
 - The README was updated to reflect the possible automatic installation of uncrustify by the extension
 
-### 1.4.0
+## 1.4.0
 - The extension now uses Typescript 2
 - On MacOS and Linux, uncrustify can be installed by the extension if it's not detected
 

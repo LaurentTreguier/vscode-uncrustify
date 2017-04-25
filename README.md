@@ -34,3 +34,7 @@ This extension contributes the following settings:
 
 * `uncrustify.executablePath`: Path to the uncrustify executable if it's not already in the PATH environment variable.
 * `uncrustify.configPath`: Path to the uncrustify configuration file. Environment variables can be used with both a Windows and a bash syntax (examples: `%SOME_PATH%/dev/uncrustify.cfg`, `$SOME_PATH/dev/uncrustify.cfg`)
+
+## Changelog
+
+See CHANGELOG.md
