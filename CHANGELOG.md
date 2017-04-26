@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.5.6
+- Removed useless error message appearing even when everything is fine; this time it's workng I swear
+
 ### 1.5.5
 - Removed forgotten test that forced uncrustify not to work...
 
