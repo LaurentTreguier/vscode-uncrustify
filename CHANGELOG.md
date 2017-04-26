@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.5.5
+- Removed forgotten test that forced uncrustify not to work...
+
 ### 1.5.4
 - Updated README to add forgotten doc about the "debug mode"
 
