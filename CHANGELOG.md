@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.6.0
+- Added command to automatically download a default config file for uncrustify
+
 ### 1.5.6
 - Removed useless error message appearing even when everything is fine; this time it's workng I swear
 

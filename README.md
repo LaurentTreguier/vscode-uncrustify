@@ -28,9 +28,11 @@ If the executable is not in the PATH environment variable, you must set its path
 An uncrustify configuration file should be set, although on Linux and OS X it will try to use a default config file.
 Thankfully, uncrustify comes with a few preset configurations if you don't want to spend hours making one yourself.
 
-## Extension Settings
+## Extension commands
 
-This extension contributes the following settings:
+* `Uncrustify: Download default config file` (`uncrustify.download`): Downloads a default `uncrustify.cfg` file and puts it at the root of the current workspace.
+
+## Extension settings
 
 * `uncrustify.executablePath` (`string`): Path to the uncrustify executable if it's not already in the PATH environment variable.
 * `uncrustify.configPath` (`string`): Path to the uncrustify configuration file. Environment variables can be used with both a Windows and a bash syntax (examples: `%SOME_PATH%/dev/uncrustify.cfg`, `$SOME_PATH/dev/uncrustify.cfg`)
