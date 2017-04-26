@@ -19,7 +19,7 @@
         "url": "https://github.com/LaurentTreguier/vscode-uncrustify/issues"
     },
     "engines": {
-        "vscode": "^1.0.0"
+        "vscode": "^1.6.0"
     },
     "categories": [
         "Languages",
@@ -40,7 +40,8 @@
         "onLanguage:java",
         "onLanguage:objective-c",
         "onLanguage:pawn",
-        "onLanguage:vala"
+        "onLanguage:vala",
+        "onCommand:uncrustify.download"
     ],
     "main": "./out/src/extension",
     "contributes": {
@@ -95,7 +96,14 @@
                     "description": "Activates logs for debugging the extension"
                 }
             }
-        }
+        },
+        "commands": [
+            {
+                "title": "Download default config file",
+                "category": "Uncrustify",
+                "command": "uncrustify.download"
+            }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "tsc -p ./",
@@ -103,11 +111,13 @@
         "postinstall": "node ./node_modules/vscode/bin/install"
     },
     "dependencies": {
-        "meta-pkg": "^0.6.4"
+        "meta-pkg": "^0.6.4",
+        "request": "^2.81.0"
     },
     "devDependencies": {
+        "@types/node": "^7.0.13",
+        "@types/request": "^0.0.42",
         "typescript": "^2.2.2",
-        "vscode": "^1.1.0",
-        "@types/node": "^7.0.13"
+        "vscode": "^1.1.0"
     }
 }

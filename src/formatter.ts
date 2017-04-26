@@ -1,5 +1,3 @@
-'use strict';
-
 import * as fs from 'fs'
 import * as cp from 'child_process'
 import * as vsc from 'vscode';
@@ -14,8 +12,8 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider {
         return new Promise((resolve, reject) => {
             token.onCancellationRequested(reject);
 
-            let conf = vsc.workspace.getConfiguration();
-            let path = conf.get<string>('uncrustify.configPath');
+            let conf = vsc.workspace.getConfiguration('uncrustify');
+            let path = conf.get<string>('configPath');
 
             logger.dbg('config file: ' + path);
 
@@ -35,7 +33,7 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider {
                 return;
             }
 
-            let uncrustifyExecutable = conf.get('uncrustify.executablePath', 'uncrustify');
+            let uncrustifyExecutable = conf.get('executablePath', 'uncrustify');
             let args = ['-l', languageMap[document.languageId], '-c', path];
             let output = '';
             let error = '';

@@ -1,5 +1,3 @@
-'use strict';
-
 import * as vsc from 'vscode';
 
 let output: vsc.OutputChannel = vsc.window.createOutputChannel('Uncrustify');
@@ -21,7 +19,7 @@ export function log(msg: string, line = true) {
 };
 
 export function dbg(msg: string, line = true) {
-    if (vsc.workspace.getConfiguration().get('uncrustify.debug', false)) {
+    if (vsc.workspace.getConfiguration('uncrustify').get('debug', false)) {
         let dmsg = 'Debug: ' + msg;
 
         if (line) {
