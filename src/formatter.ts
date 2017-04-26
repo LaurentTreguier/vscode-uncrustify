@@ -36,7 +36,7 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider {
             }
 
             let uncrustifyExecutable = conf.get('uncrustify.executablePath', 'uncrustify');
-            let args = ['-l', languageMap[document.languageId], '-c', path + '.yolo'];
+            let args = ['-l', languageMap[document.languageId], '-c', path];
             let output = '';
             let error = '';
             let uncrustify = cp.spawn(uncrustifyExecutable, args);
