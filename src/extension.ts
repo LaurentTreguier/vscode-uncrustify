@@ -5,13 +5,16 @@ import * as vsc from 'vscode';
 import * as req from 'request';
 import * as pkg from 'meta-pkg';
 import * as logger from './logger';
-import { MODES } from './modes';
+import * as util from './util';
 import Formatter from './formatter';
 import Configurator from './configurator';
 
-const address = 'https://raw.githubusercontent.com/uncrustify/uncrustify/uncrustify-%VERSION%/documentation/htdocs/default.cfg';
+let extContext: vsc.ExtensionContext;
 
 export function activate(context: vsc.ExtensionContext) {
+    logger.dbg('extension started');
+    extContext = context;
+
     let message = 'Uncrustify does not seem to be installed';
     let choices: string[] = [];
     let installerChoices = {};
@@ -33,8 +36,6 @@ export function activate(context: vsc.ExtensionContext) {
             }
         }
     };
-
-    logger.dbg('extension started');
 
     pkg.isInstalled(uncrustify)
         .then((installed) => {
@@ -78,7 +79,7 @@ export function activate(context: vsc.ExtensionContext) {
             }
         });
 
-    let formatterSub = vsc.languages.registerDocumentFormattingEditProvider(MODES, new Formatter());
+    let formatterSub = vsc.languages.registerDocumentFormattingEditProvider(util.MODES, new Formatter());
     context.subscriptions.push(formatterSub);
     logger.dbg('registered formatter');
 
@@ -93,7 +94,7 @@ export function activate(context: vsc.ExtensionContext) {
         }
 
         let output = '';
-        let configPath = path.join(vsc.workspace.rootPath, 'uncrustify.cfg');
+        let configPath = path.join(vsc.workspace.rootPath, util.CONFIG_FILE_NAME);
 
         new Promise<string>((resolve) => cp.spawn('uncrustify', ['--version'])
             .stdout
@@ -101,13 +102,63 @@ export function activate(context: vsc.ExtensionContext) {
             .on('close', () => resolve(output.match(/([\d.]+)/)[1])))
             .then((ver) => new Promise<string>((resolve, reject) => {
                 logger.dbg('uncrustify version: ' + ver);
-                req.get(address.replace('%VERSION%', ver), (err, res, body) =>
+                req.get(util.ADDRESS.replace('%VERSION%', ver), (err, res, body) =>
                     err ? reject(err) : resolve(body));
-            }
-            )).then((config) => new Promise((resolve) =>
+            })).then((config) => new Promise((resolve) =>
                 fs.writeFile(configPath, config, () => resolve(config))))
             .then(() => vsc.workspace.getConfiguration('uncrustify').update('configPath', configPath));
     });
+
+    vsc.commands.registerCommand('uncrustify.configure', () => {
+        logger.dbg('command: configure');
+
+        if (vsc.workspace.rootPath) {
+            vsc.commands.executeCommand('vscode.open', vsc.Uri.file(path.join(vsc.workspace.rootPath, util.CONFIG_FILE_NAME)));
+        }
+    });
+
+    vsc.commands.registerCommand('uncrustify.save', (config) => {
+        logger.dbg('command: save');
+
+        let configPath = path.join(vsc.workspace.rootPath, util.CONFIG_FILE_NAME);
+
+        new Promise((resolve, reject) => fs.readFile(configPath, (err, data) => {
+            if (err) {
+                reject();
+            }
+
+            resolve(data);
+        })).then((data) => {
+            let result = data.toString();
+
+            for (let key in config) {
+                if (config[key] === '') {
+                    config[key] = '""';
+                }
+
+                result = result.replace(new RegExp(`(${key}\\s*=\\s*)\\S+(.*)`), `$1${config[key]}$2`);
+            }
+
+            fs.writeFile(configPath, result);
+        }).catch(() => { })
+    });
+
+    if (vsc.workspace.getConfiguration('uncrustify').get('graphicalConfig')) {
+        function graphicalEdit(doc: vsc.TextDocument) {
+            if (path.basename(doc.fileName) === 'uncrustify.cfg' && doc.uri.scheme === 'file') {
+                vsc.commands.executeCommand('workbench.action.closeActiveEditor')
+                    .then(() => vsc.commands.executeCommand('vscode.previewHtml', util.configUri()));
+            }
+        }
+
+        vsc.workspace.onDidOpenTextDocument(graphicalEdit);
+
+        if (vsc.window.activeTextEditor) {
+            graphicalEdit(vsc.window.activeTextEditor.document);
+        }
+    }
 };
 
 export function deactivate() { };
+
+export { extContext };

@@ -41,39 +41,12 @@
         "onLanguage:objective-c",
         "onLanguage:pawn",
         "onLanguage:vala",
-        "onCommand:uncrustify.download"
+        "workspaceContains:uncrustify.cfg",
+        "onCommand:uncrustify.download",
+        "onCommand:uncrustify.configure"
     ],
     "main": "./out/src/extension",
     "contributes": {
-        "languages": [
-            {
-                "id": "apex"
-            },
-            {
-                "id": "c"
-            },
-            {
-                "id": "cpp"
-            },
-            {
-                "id": "csharp"
-            },
-            {
-                "id": "d"
-            },
-            {
-                "id": "java"
-            },
-            {
-                "id": "objective-c"
-            },
-            {
-                "id": "pawn"
-            },
-            {
-                "id": "vala"
-            }
-        ],
         "configuration": {
             "title": "Uncrustify configuration",
             "properties": {
@@ -90,6 +63,11 @@
                     "default": null,
                     "description": "Path to the uncrustify configuration file"
                 },
+                "uncrustify.graphicalConfig": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Toggles the graphical config editor"
+                },
                 "uncrustify.debug": {
                     "type": "boolean",
                     "default": false,
@@ -102,6 +80,16 @@
                 "title": "Download default config file",
                 "category": "Uncrustify",
                 "command": "uncrustify.download"
+            },
+            {
+                "title": "Edit config file",
+                "category": "Uncrustify",
+                "command": "uncrustify.configure"
+            },
+            {
+                "title": "Save config file",
+                "category": "Uncustify",
+                "command": "uncrustify.save"
             }
         ]
     },
@@ -115,9 +103,9 @@
         "request": "^2.81.0"
     },
     "devDependencies": {
-        "@types/node": "^7.0.13",
+        "@types/node": "^7.0.14",
         "@types/request": "^0.0.42",
-        "typescript": "^2.2.2",
+        "typescript": "^2.3.2",
         "vscode": "^1.1.0"
     }
 }
