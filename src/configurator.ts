@@ -87,12 +87,12 @@ function parseConfig(config: string) {
                     let tr = new Node('tr');
                     let td = new Node('td');
 
-                    instructionAccumulator.title = commentAccumulator;
                     td.children.push(new Node('p', instructionAccumulator.name));
                     tr.children.push(td);
                     td = new Node('td');
                     td.children.push(new Node('input', instructionAccumulator));
                     tr.children.push(td);
+                    tr.children.push(new Node('td', commentAccumulator));
                     table.children.push(tr);
                 }
 
