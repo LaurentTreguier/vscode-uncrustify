@@ -32,7 +32,7 @@ A default config file can automatically be downloaded (see the [commands](#exten
 
 Starting with version 2.0.0, opening the configured config file (or a file named `uncrustify.cfg` at the root of your workspace if it's not configured) will display a graphical editor to easily tweak the configuration file.
 
-![configuration](images/screenshot.png)
+![configuration image](https://raw.githubusercontent.com/LaurentTreguier/vscode-uncrustify/master/images/screenshot.png)
 
 The graphical editor can be disabled in the [extension seetings](#extension-settings).
 

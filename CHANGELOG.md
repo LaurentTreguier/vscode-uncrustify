@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.1
+- Corrected image in README
+
 ## 2.0.0
 - Added graphical config editor to ease configuration
 
