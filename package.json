@@ -57,8 +57,7 @@
                 },
                 "uncrustify.configPath": {
                     "type": [
-                        "string",
-                        "null"
+                        "string"
                     ],
                     "default": null,
                     "description": "Path to the uncrustify configuration file"

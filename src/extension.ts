@@ -94,7 +94,8 @@ export function activate(context: vsc.ExtensionContext) {
         }
 
         let output = '';
-        let configPath = path.join(vsc.workspace.rootPath, util.CONFIG_FILE_NAME);
+        let configPath = vsc.workspace.getConfiguration('uncrustify')
+            .get<string>('configPath') || path.join(vsc.workspace.rootPath, util.CONFIG_FILE_NAME);
 
         new Promise<string>((resolve) => cp.spawn('uncrustify', ['--version'])
             .stdout
@@ -104,15 +105,14 @@ export function activate(context: vsc.ExtensionContext) {
                 logger.dbg('uncrustify version: ' + ver);
                 req.get(util.ADDRESS.replace('%VERSION%', ver), (err, res, body) =>
                     err ? reject(err) : resolve(body));
-            })).then((config) => new Promise((resolve) =>
-                fs.writeFile(configPath, config, () => resolve(config))))
-            .then(() => vsc.workspace.getConfiguration('uncrustify').update('configPath', configPath));
+            })).then((config) => fs.writeFile(configPath, config));
     });
 
     vsc.commands.registerCommand('uncrustify.save', (config) => {
         logger.dbg('command: save');
 
-        let configPath = path.join(vsc.workspace.rootPath, util.CONFIG_FILE_NAME);
+        let configPath = vsc.workspace.getConfiguration('uncrustify')
+            .get<string>('configPath') || path.join(vsc.workspace.rootPath, util.CONFIG_FILE_NAME);
 
         new Promise((resolve, reject) => fs.readFile(configPath, (err, data) => {
             if (err) {
@@ -134,16 +134,20 @@ export function activate(context: vsc.ExtensionContext) {
             }
 
             logger.dbg('saved config file');
-        }))).catch((reason) => logger.dbg('error: ' + reason));
+        }))).catch((reason) => logger.dbg('error saving config file: ' + reason));
     });
 
     if (vsc.workspace.getConfiguration('uncrustify').get('graphicalConfig')) {
         function graphicalEdit(doc: vsc.TextDocument) {
-            if (path.basename(doc.fileName) === 'uncrustify.cfg' && doc.uri.scheme === 'file') {
+            let configPath = vsc.workspace.getConfiguration('uncrustify')
+                .get<string>('configPath') || path.join(vsc.workspace.rootPath, util.CONFIG_FILE_NAME);
+
+            if (doc.uri.scheme === 'file' && doc.fileName === configPath) {
                 logger.dbg('launching graphical editor');
 
                 vsc.commands.executeCommand('workbench.action.closeActiveEditor')
-                    .then(() => vsc.commands.executeCommand('vscode.previewHtml', util.configUri()));
+                    .then(() => vsc.commands.executeCommand('vscode.previewHtml',
+                        util.configUri(), undefined, 'Uncrustify configuration'));
             }
         }
 

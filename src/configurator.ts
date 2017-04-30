@@ -14,7 +14,8 @@ const typesMap = {
 
 export default class Configurator implements vsc.TextDocumentContentProvider {
     provideTextDocumentContent(uri: vsc.Uri, token: vsc.CancellationToken) {
-        let configPath = path.join(vsc.workspace.rootPath, util.CONFIG_FILE_NAME);
+        let configPath = vsc.workspace.getConfiguration('uncrustify')
+            .get<string>('configPath') || path.join(vsc.workspace.rootPath, util.CONFIG_FILE_NAME);
 
         return new Promise<string>((resolve) =>
             fs.readFile(configPath, (err, data) => resolve(data.toString())))

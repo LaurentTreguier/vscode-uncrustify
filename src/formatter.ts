@@ -1,7 +1,9 @@
 import * as fs from 'fs'
+import * as path from 'path'
 import * as cp from 'child_process'
 import * as vsc from 'vscode';
 import * as logger from './logger';
+import * as util from './util';
 
 export default class Formatter implements vsc.DocumentFormattingEditProvider {
     public provideDocumentFormattingEdits(
@@ -13,28 +15,28 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider {
             token.onCancellationRequested(reject);
 
             let conf = vsc.workspace.getConfiguration('uncrustify');
-            let path = conf.get<string>('configPath');
+            let configPath = conf.get<string>('configPath') || path.join(vsc.workspace.rootPath, util.CONFIG_FILE_NAME);
 
-            logger.dbg('config file: ' + path);
+            logger.dbg('config file: ' + configPath);
 
             try {
-                if (path) {
-                    path = path.replace(/(%\w+%)|(\$\w+)/, (variable) => {
+                if (configPath) {
+                    configPath = configPath.replace(/(%\w+%)|(\$\w+)/, (variable) => {
                         let end = variable.startsWith('%') ? 2 : 1;
                         return process.env[variable.substr(1, variable.length - end)];
                     });
                 }
 
-                fs.accessSync(path.toString());
+                fs.accessSync(configPath);
             } catch (err) {
-                logger.dbg('config file could not be accessed: ' + err);
-                vsc.window.showErrorMessage('The uncrustify config file path is incorrect: ' + path);
+                logger.dbg('error accessing config file: ' + err);
+                vsc.window.showErrorMessage('The uncrustify config file path is incorrect: ' + configPath);
                 reject();
                 return;
             }
 
             let uncrustifyExecutable = conf.get('executablePath', 'uncrustify');
-            let args = ['-l', languageMap[document.languageId], '-c', path];
+            let args = ['-l', languageMap[document.languageId], '-c', configPath];
             let output = '';
             let error = '';
             let uncrustify = cp.spawn(uncrustifyExecutable, args);

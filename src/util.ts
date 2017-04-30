@@ -14,6 +14,6 @@ export const MODES = [
     'vala'
 ];
 
-export function configUri(local = true, name = CONFIG_FILE_NAME) {
+export function configUri(name = CONFIG_FILE_NAME, local = true) {
     return vsc.Uri.parse(`uncrustify://${local ? 'local' : 'global'}/` + name);
 };
