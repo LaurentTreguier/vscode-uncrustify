@@ -109,14 +109,6 @@ export function activate(context: vsc.ExtensionContext) {
             .then(() => vsc.workspace.getConfiguration('uncrustify').update('configPath', configPath));
     });
 
-    vsc.commands.registerCommand('uncrustify.configure', () => {
-        logger.dbg('command: configure');
-
-        if (vsc.workspace.rootPath) {
-            vsc.commands.executeCommand('vscode.open', vsc.Uri.file(path.join(vsc.workspace.rootPath, util.CONFIG_FILE_NAME)));
-        }
-    });
-
     vsc.commands.registerCommand('uncrustify.save', (config) => {
         logger.dbg('command: save');
 
@@ -124,7 +116,7 @@ export function activate(context: vsc.ExtensionContext) {
 
         new Promise((resolve, reject) => fs.readFile(configPath, (err, data) => {
             if (err) {
-                reject();
+                reject(err);
             }
 
             resolve(data);
@@ -135,13 +127,21 @@ export function activate(context: vsc.ExtensionContext) {
                 result = result.replace(new RegExp(`^(${key}\\s*=\\s*)\\S+(.*)`, 'm'), `$1${config[key]}$2`);
             }
 
-            fs.writeFile(configPath, result);
-        }).catch(() => { })
+            return result;
+        }).then((result) => new Promise((resolve, reject) => fs.writeFile(configPath, result, (err) => {
+            if (err) {
+                reject(err);
+            }
+
+            logger.dbg('saved config file');
+        }))).catch((reason) => logger.dbg('error: ' + reason));
     });
 
     if (vsc.workspace.getConfiguration('uncrustify').get('graphicalConfig')) {
         function graphicalEdit(doc: vsc.TextDocument) {
             if (path.basename(doc.fileName) === 'uncrustify.cfg' && doc.uri.scheme === 'file') {
+                logger.dbg('launching graphical editor');
+
                 vsc.commands.executeCommand('workbench.action.closeActiveEditor')
                     .then(() => vsc.commands.executeCommand('vscode.previewHtml', util.configUri()));
             }

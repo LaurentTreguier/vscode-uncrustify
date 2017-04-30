@@ -82,11 +82,6 @@
                 "command": "uncrustify.download"
             },
             {
-                "title": "Edit config file",
-                "category": "Uncrustify",
-                "command": "uncrustify.configure"
-            },
-            {
                 "title": "Save config file",
                 "category": "Uncustify",
                 "command": "uncrustify.save"

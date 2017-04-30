@@ -2,8 +2,8 @@ import * as os from 'os';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as vsc from 'vscode';
-import * as req from 'request';
 import * as ext from './extension';
+import * as logger from './logger';
 import * as util from './util';
 
 const typesMap = {
@@ -19,6 +19,8 @@ export default class Configurator implements vsc.TextDocumentContentProvider {
         return new Promise<string>((resolve) =>
             fs.readFile(configPath, (err, data) => resolve(data.toString())))
             .then((config) => {
+                logger.dbg('generating HTML');
+
                 let resourcepath = path.join(ext.extContext.extensionPath, 'src', 'editor');
                 let html = new Node('html');
                 let head = new Node('head');
@@ -78,6 +80,8 @@ class Node {
 }
 
 function parseConfig(config: string) {
+    logger.dbg('parsing config');
+
     let nodes: Node[] = [];
     let table = new Node('table');
     let commentAccumulator = '';
