@@ -2,6 +2,20 @@ function save() {
     var config = {};
 
     for (var input of document.getElementsByTagName('input')) {
+        switch (input.type) {
+            case 'number':
+                config[input.name] = Number.parseInt(input.value);
+                break;
+            case 'checkbox':
+                config[input.name] = input.checked;
+                break;
+            default:
+                config[input.name] = '"' + input.value + '"';
+                break;
+        }
+    }
+
+    for (var input of document.getElementsByTagName('select')) {
         config[input.name] = input.value;
     }
 

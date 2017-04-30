@@ -132,11 +132,7 @@ export function activate(context: vsc.ExtensionContext) {
             let result = data.toString();
 
             for (let key in config) {
-                if (config[key] === '') {
-                    config[key] = '""';
-                }
-
-                result = result.replace(new RegExp(`(${key}\\s*=\\s*)\\S+(.*)`), `$1${config[key]}$2`);
+                result = result.replace(new RegExp(`^(${key}\\s*=\\s*)\\S+(.*)`, 'm'), `$1${config[key]}$2`);
             }
 
             fs.writeFile(configPath, result);

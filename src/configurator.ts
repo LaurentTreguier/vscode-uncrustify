@@ -6,6 +6,12 @@ import * as req from 'request';
 import * as ext from './extension';
 import * as util from './util';
 
+const typesMap = {
+    string: 'text',
+    number: 'number',
+    'false/true': 'checkbox'
+}
+
 export default class Configurator implements vsc.TextDocumentContentProvider {
     provideTextDocumentContent(uri: vsc.Uri, token: vsc.CancellationToken) {
         let configPath = path.join(vsc.workspace.rootPath, util.CONFIG_FILE_NAME);
@@ -40,6 +46,10 @@ class Node {
         return this._tag;
     }
 
+    get data() {
+        return this._data;
+    }
+
     constructor(private _tag: string, private _data = null, private _autoclose = false) { }
 
     toString() {
@@ -55,7 +65,11 @@ class Node {
             }
 
             for (let key in this._data) {
-                props += ` ${key}="${this._data[key]}"`;
+                props += ' ' + key;
+
+                if (this._data[key] !== null) {
+                    props += `="${this._data[key]}"`;
+                }
             }
         }
 
@@ -67,12 +81,12 @@ function parseConfig(config: string) {
     let nodes: Node[] = [];
     let table = new Node('table');
     let commentAccumulator = '';
-    let instructionAccumulator;
+    let instructionNode: Node;
 
     config.split(/\r?\n/).forEach((line) => {
         if (line.length <= 1) {
             if (line.length === 0) {
-                if (commentAccumulator.length !== 0 && !instructionAccumulator) {
+                if (commentAccumulator.length !== 0 && !instructionNode) {
                     if (table.children.length) {
                         nodes.push(table);
                     } else {
@@ -83,21 +97,21 @@ function parseConfig(config: string) {
                     table = new Node('table');
                 }
 
-                if (instructionAccumulator) {
+                if (instructionNode) {
                     let tr = new Node('tr');
                     let td = new Node('td');
 
-                    td.children.push(new Node('p', instructionAccumulator.name));
+                    td.children.push(new Node('p', instructionNode.data.name));
                     tr.children.push(td);
                     td = new Node('td');
-                    td.children.push(new Node('input', instructionAccumulator));
+                    td.children.push(instructionNode);
                     tr.children.push(td);
                     tr.children.push(new Node('td', commentAccumulator));
                     table.children.push(tr);
                 }
 
                 commentAccumulator = '';
-                instructionAccumulator = null;
+                instructionNode = null;
             }
 
             return;
@@ -109,12 +123,38 @@ function parseConfig(config: string) {
         if (comment) {
             commentAccumulator += os.EOL + comment[1];
         } else if (instruction) {
-            instructionAccumulator = {
-                type: 'text',
+            instructionNode = new Node('input', {
+                type: typesMap[instruction[3]],
                 name: instruction[1],
-                value: instruction[2],
                 placeholder: instruction[3]
-            };
+            });
+
+            if (instructionNode.data.type === 'checkbox') {
+                if (instruction[2] === 'true') {
+                    instructionNode.data.checked = null;
+                }
+            } else {
+                instructionNode.data.value = instruction[2];
+            }
+
+            let answers = instruction[3].split('/');
+
+            if (!instructionNode.data.type) {
+                if (answers.length > 1) {
+                    instructionNode = new Node('select', { name: instruction[1] });
+                    answers.forEach((answer) => {
+                        let data: any = { _: answer, value: answer };
+
+                        if (answer === instruction[2]) {
+                            data.selected = null;
+                        }
+
+                        instructionNode.children.push(new Node('option', data));
+                    });
+                } else {
+                    instructionNode.data.type = 'text';
+                }
+            }
         }
     });
 
