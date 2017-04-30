@@ -1,7 +1,15 @@
-#save {
+#actions {
     position: fixed;
     right: 1em;
     top: 1em;
+    text-align: center;
+}
+
+h2 {
+    cursor: pointer;
+}
+
+h3 {
     padding: 1em;
     background: #7f7f7f;
     color: #fff;
@@ -9,18 +17,14 @@
     cursor: pointer;
 }
 
-#save:hover {
+h3:hover {
     background: #9f9f9f;
     transition: 0.3s;
 }
 
-#save:active {
+h3:active {
     background: #bfbfbf;
     transition: 0.1s;
-}
-
-h2 {
-    cursor: pointer;
 }
 
 table {

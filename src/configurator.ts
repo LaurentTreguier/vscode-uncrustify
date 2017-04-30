@@ -14,27 +14,29 @@ const typesMap = {
 
 export default class Configurator implements vsc.TextDocumentContentProvider {
     provideTextDocumentContent(uri: vsc.Uri, token: vsc.CancellationToken) {
-        let configPath = vsc.workspace.getConfiguration('uncrustify')
-            .get<string>('configPath') || path.join(vsc.workspace.rootPath, util.CONFIG_FILE_NAME);
-
         return new Promise<string>((resolve) =>
-            fs.readFile(configPath, (err, data) => resolve(data.toString())))
+            fs.readFile(util.configPath(), (err, data) => resolve(data.toString())))
             .then((config) => {
                 logger.dbg('generating HTML');
 
                 let resourcepath = path.join(ext.extContext.extensionPath, 'src', 'editor');
                 let html = new Node('html');
+
                 let head = new Node('head');
                 let style = new Node('link', { rel: 'stylesheet', href: path.join(resourcepath, 'uncrustify.css') }, true);
                 let script = new Node('script', { src: path.join(resourcepath, 'uncrustify.js') });
+
                 let body = new Node('body');
-                let save = new Node('h3', { _: 'SAVE', id: 'save', onclick: 'save()' });
+                let actions = new Node('div', { id: 'actions' });
+                let save = new Node('h3', { _: 'SAVE', onclick: 'save(false)' });
+                let savePreset = new Node('h3', { _: 'SAVE PRESET', onclick: 'save(true)' });
                 let form = new Node('form');
                 let a = new Node('a', { id: 'a', display: 'none' });
 
                 html.children.push(head, body);
                 head.children.push(style, script);
-                body.children.push(save, form, a);
+                body.children.push(actions, form, a);
+                actions.children.push(save, savePreset);
                 form.children = parseConfig(config);
 
                 return '<!DOCTYPE html>' + html.toString();

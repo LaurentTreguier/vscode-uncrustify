@@ -43,7 +43,8 @@
         "onLanguage:vala",
         "workspaceContains:uncrustify.cfg",
         "onCommand:uncrustify.download",
-        "onCommand:uncrustify.configure"
+        "onCommand:uncrustify.loadPreset",
+        "onCommand:uncrustify.deletePreset"
     ],
     "main": "./out/src/extension",
     "contributes": {
@@ -84,6 +85,21 @@
                 "title": "Save config file",
                 "category": "Uncustify",
                 "command": "uncrustify.save"
+            },
+            {
+                "title": "Save config file as preset",
+                "category": "Uncustify",
+                "command": "uncrustify.savePreset"
+            },
+            {
+                "title": "Load preset config file",
+                "category": "Uncrustify",
+                "command": "uncrustify.loadPreset"
+            },
+            {
+                "title": "Delete preset config file",
+                "category": "Uncrustify",
+                "command": "uncrustify.deletePreset"
             }
         ]
     },

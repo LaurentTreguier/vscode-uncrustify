@@ -1,4 +1,4 @@
-function save() {
+function save(preset) {
     var config = {};
 
     for (var input of document.getElementsByTagName('input')) {
@@ -10,7 +10,7 @@ function save() {
                 config[input.name] = input.checked;
                 break;
             default:
-                config[input.name] = '"' + input.value + '"';
+                config[input.name] = `"${input.value}"`;
                 break;
         }
     }
@@ -21,7 +21,7 @@ function save() {
 
     var a = document.getElementById('a');
 
-    a.href = encodeURI('command:uncrustify.save?' + JSON.stringify(config));
+    a.href = encodeURI(`command:uncrustify.save${preset ? 'Preset' : ''}?` + JSON.stringify(config));
     a.click();
 }
 
