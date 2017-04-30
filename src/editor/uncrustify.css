@@ -3,18 +3,19 @@
     right: 1em;
     top: 1em;
     padding: 1em;
-    box-shadow: 0 0 0.5em #7f7f7f;
+    background: #7f7f7f;
+    color: #fff;
     transition: 0.5s;
     cursor: pointer;
 }
 
 #save:hover {
-    box-shadow: 0 0 1em #7f7f7f;
+    background: #9f9f9f;
     transition: 0.3s;
 }
 
 #save:active {
-    color: #7f7f7f;
+    background: #bfbfbf;
     transition: 0.1s;
 }
 
