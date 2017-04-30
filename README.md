@@ -25,8 +25,16 @@ If you want or have to install it yourself :
 - Windows : Prebuilt binaries are available on [sourceforge](https://sourceforge.net/projects/uncrustify/files). You will need to put the executable in your `PATH` variable and you will have to update it manually
 
 If the executable is not in the PATH environment variable, you must set its path in the settings explicitly.
-An uncrustify configuration file should be set, although on Linux and OS X it will try to use a default config file.
-Thankfully, uncrustify comes with a few preset configurations if you don't want to spend hours making one yourself.
+
+## Uncrustify configuration
+
+A default config file can automatically be downloaded (see the [commands](#extension-commands) below).
+
+Starting with version 2.0.0, opening the configured config file (or a file named `uncrustify.cfg` at the root of your workspace if it's not configured) will display a graphical editor to easily tweak the configuration file.
+
+![configuration](images/screenshot.png)
+
+The graphical editor can be disabled in the [extension seetings](#extension-settings).
 
 ## Extension commands
 
@@ -36,8 +44,14 @@ Thankfully, uncrustify comes with a few preset configurations if you don't want 
 
 * `uncrustify.executablePath` (`string`): Path to the uncrustify executable if it's not already in the PATH environment variable.
 * `uncrustify.configPath` (`string`): Path to the uncrustify configuration file. Environment variables can be used with both a Windows and a bash syntax (examples: `%SOME_PATH%/dev/uncrustify.cfg`, `$SOME_PATH/dev/uncrustify.cfg`)
+* `uncrustify.graphicalConfig (`boolean`): Toggles the graphical config editor when opening an uncrustify config file.
 * `uncrustify.debug` (`boolean`): Activates logs for debugging the extension. Logs should appear in the uncrustify output channel.
 
 ## Changelog
 
 See CHANGELOG.md
+
+## TODO
+
+- Detect config file version and add ability to update the config file to match the uncrustify executable version
+- Allow saving config files as presets to easily load a custom config file in a new workspace
