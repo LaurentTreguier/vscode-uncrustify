@@ -10,3 +10,11 @@ function save() {
     a.href = encodeURI('command:uncrustify.save?' + JSON.stringify(config));
     a.click();
 }
+
+function toggle(event) {
+    var titles = document.getElementsByTagName('h2');
+    var tables = document.getElementsByTagName('table');
+    var table = tables[Array.from(titles).indexOf(event.srcElement)];
+
+    table.style.display = table.style.display !== 'initial' ? 'initial' : 'none';
+}

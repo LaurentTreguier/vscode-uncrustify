@@ -17,3 +17,11 @@
     color: #7f7f7f;
     transition: 0.1s;
 }
+
+h2 {
+    cursor: pointer;
+}
+
+table {
+    display: none;
+}

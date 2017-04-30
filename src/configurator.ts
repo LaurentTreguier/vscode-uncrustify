@@ -79,7 +79,7 @@ function parseConfig(config: string) {
                         nodes.pop();
                     }
 
-                    nodes.push(new Node('h2', commentAccumulator));
+                    nodes.push(new Node('h2', { _: commentAccumulator, onclick: 'toggle(event)' }));
                     table = new Node('table');
                 }
 
