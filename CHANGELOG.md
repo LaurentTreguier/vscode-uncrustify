@@ -1,6 +1,9 @@
 # Changelog
 
-## 2.0.1
+### 2.1.0
+- Added ability to save and load configuration file presets
+
+#### 2.0.1
 - Corrected image in README
 
 ## 2.0.0

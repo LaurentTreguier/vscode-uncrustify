@@ -54,4 +54,3 @@ See CHANGELOG.md
 ## TODO
 
 - Detect config file version and add ability to update the config file to match the uncrustify executable version
-- Allow saving config files as presets to easily load a custom config file in a new workspace
