@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.2.1
+- Fixed editor css and js files not being loaded
+
 ### 2.2.0
 - Fixed preset loading that could interrupt config file download
 - Added the ability to upgrade config files when they are not made for the same version as the uncrustify executable
