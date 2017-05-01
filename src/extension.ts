@@ -103,7 +103,7 @@ export function activate(context: vsc.ExtensionContext) {
                 logger.dbg('uncrustify version: ' + ver);
                 req.get(util.ADDRESS.replace('%VERSION%', ver), (err, res, body) =>
                     err ? reject(err) : resolve(body));
-            })).then((config) => fs.writeFile(util.configPath(), config));
+            })).then((config) => new Promise((resolve) => fs.writeFile(util.configPath(), config, resolve)));
     });
 
     vsc.commands.registerCommand('uncrustify.save', (config) => {
@@ -147,10 +147,10 @@ export function activate(context: vsc.ExtensionContext) {
                 throw new Error('Name is empty');
             }
 
-            logger.dbg('saving preset ' + chosenName);
-
             let presets = extContext.globalState.get('presets', {});
             presets[chosenName] = config;
+
+            logger.dbg('saved preset ' + chosenName);
 
             return extContext.globalState.update('presets', presets)
         }).then(() => (name === undefined) && vsc.window.showInformationMessage('Preset saved !'));
@@ -158,18 +158,24 @@ export function activate(context: vsc.ExtensionContext) {
 
     presetCommand('loadPreset', (presets, name, internal) => vsc.commands.executeCommand('uncrustify.download')
         .then(() => vsc.commands.executeCommand('uncrustify.save', presets[name]))
-        .then(() => !internal && vsc.window.showInformationMessage('Preset loaded !')));
+        .then(() => {
+            Configurator.oldConfig = presets[name];
+
+            if (!internal) {
+                vsc.window.showInformationMessage('Preset loaded !');
+            }
+        }));
 
     presetCommand('deletePreset', (presets, name, internal) => {
         delete presets[name];
-        extContext.globalState.update('presets', presets)
+        return extContext.globalState.update('presets', presets)
             .then(() => !internal && vsc.window.showInformationMessage('Preset deleted !'));
     });
 
     vsc.commands.registerCommand('uncrustify.upgrade', (config) => {
         logger.dbg('command: upgrade');
 
-        vsc.commands.executeCommand('uncrustify.savePreset', config, '')
+        return vsc.commands.executeCommand('uncrustify.savePreset', config, '')
             .then(() => vsc.commands.executeCommand('uncrustify.loadPreset', ''))
             .then(() => vsc.commands.executeCommand('uncrustify.deletePreset', ''))
             .then(() => vsc.commands.executeCommand('vscode.open', vsc.Uri.file(util.configPath())));

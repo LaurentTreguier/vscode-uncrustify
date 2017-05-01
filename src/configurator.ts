@@ -11,9 +11,11 @@ const typesMap = {
     string: 'text',
     number: 'number',
     'false/true': 'checkbox'
-}
+};
 
 export default class Configurator implements vsc.TextDocumentContentProvider {
+    static oldConfig: any;
+
     provideTextDocumentContent(uri: vsc.Uri, token: vsc.CancellationToken) {
         return new Promise<string>((resolve) =>
             fs.readFile(util.configPath(), (err, data) => resolve(data.toString())))
@@ -140,13 +142,26 @@ function parseConfig(config: string) {
 
                 if (instructionNode) {
                     let tr = new Node('tr');
-                    let td = new Node('td');
+                    let td: Node;
 
+                    if (Configurator.oldConfig) {
+                        td = new Node('td', {
+                            _: Configurator.oldConfig[instructionNode.data.name] === undefined
+                                ? 'NEW'
+                                : '',
+                            class: 'new-item'
+                        });
+                        tr.children.push(td);
+                    }
+
+                    td = new Node('td');
                     td.children.push(new Node('p', instructionNode.data.name));
                     tr.children.push(td);
+
                     td = new Node('td');
                     td.children.push(instructionNode);
                     tr.children.push(td);
+
                     tr.children.push(new Node('td', commentAccumulator));
                     table.children.push(tr);
                 }

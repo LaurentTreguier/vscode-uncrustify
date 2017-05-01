@@ -5,6 +5,11 @@
     text-align: center;
 }
 
+.new-item {
+    padding-right: 1em;
+    color: #0f0;
+}
+
 h2 {
     cursor: pointer;
 }
