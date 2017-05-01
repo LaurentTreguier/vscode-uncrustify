@@ -24,7 +24,7 @@ export default class Configurator implements vsc.TextDocumentContentProvider {
             .then((result) => {
                 logger.dbg('generating HTML');
 
-                let resourcepath = path.join(ext.extContext.extensionPath, 'src', 'editor');
+                let resourcepath = path.join(ext.extContext.extensionPath, 'editor');
                 let html = new Node('html');
 
                 let head = new Node('head');
