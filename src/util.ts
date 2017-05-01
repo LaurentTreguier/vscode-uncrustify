@@ -20,6 +20,6 @@ export function configPath() {
         .get<string>('configPath') || path.join(vsc.workspace.rootPath, CONFIG_FILE_NAME);
 }
 
-export function configUri(name = CONFIG_FILE_NAME, local = true) {
-    return vsc.Uri.parse(`uncrustify://${local ? 'local' : 'global'}/` + name);
+export function configUri() {
+    return vsc.Uri.parse(`uncrustify://configuration`);
 };

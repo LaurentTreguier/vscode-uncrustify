@@ -100,6 +100,11 @@
                 "title": "Delete preset config file",
                 "category": "Uncrustify",
                 "command": "uncrustify.deletePreset"
+            },
+            {
+                "title": "Upgrade config file",
+                "category": "Uncrustify",
+                "command": "uncrustify.upgrade"
             }
         ]
     },

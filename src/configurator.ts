@@ -1,6 +1,7 @@
 import * as os from 'os';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as cp from 'child_process';
 import * as vsc from 'vscode';
 import * as ext from './extension';
 import * as logger from './logger';
@@ -16,7 +17,9 @@ export default class Configurator implements vsc.TextDocumentContentProvider {
     provideTextDocumentContent(uri: vsc.Uri, token: vsc.CancellationToken) {
         return new Promise<string>((resolve) =>
             fs.readFile(util.configPath(), (err, data) => resolve(data.toString())))
-            .then((config) => {
+            .then((config) => checkVersion(config)
+                .then((rightVersion) => ({ config: config, rightVersion: rightVersion })))
+            .then((result) => {
                 logger.dbg('generating HTML');
 
                 let resourcepath = path.join(ext.extContext.extensionPath, 'src', 'editor');
@@ -28,8 +31,9 @@ export default class Configurator implements vsc.TextDocumentContentProvider {
 
                 let body = new Node('body');
                 let actions = new Node('div', { id: 'actions' });
-                let save = new Node('h3', { _: 'SAVE', onclick: 'save(false)' });
-                let savePreset = new Node('h3', { _: 'SAVE PRESET', onclick: 'save(true)' });
+                let save = new Node('h3', { _: 'SAVE', onclick: 'action(\'save\')' });
+                let savePreset = new Node('h3', { _: 'SAVE PRESET', onclick: 'action(\'savePreset\')' });
+                let upgrade = new Node('h3', { _: 'UPGRADE CONFIG', onclick: 'action(\'upgrade\')' });
                 let form = new Node('form');
                 let a = new Node('a', { id: 'a', display: 'none' });
 
@@ -37,7 +41,11 @@ export default class Configurator implements vsc.TextDocumentContentProvider {
                 head.children.push(style, script);
                 body.children.push(actions, form, a);
                 actions.children.push(save, savePreset);
-                form.children = parseConfig(config);
+                form.children = parseConfig(result.config);
+
+                if (!result.rightVersion) {
+                    actions.children.push(upgrade);
+                }
 
                 return '<!DOCTYPE html>' + html.toString();
             });
@@ -80,6 +88,32 @@ class Node {
 
         return `<${this._tag}${props}>${value}${this.children.map((n) => n.toString()).join('')}${this._autoclose ? '' : ('</' + this._tag + '>')}`;
     }
+}
+
+function checkVersion(config: string) {
+    let version: string = null;
+    let output = '';
+
+    for (let line of config.split(/\r?\n/)) {
+        let match = line.match(/^#\s*uncrustify\s*([\d.]+)/i);
+
+        if (match) {
+            version = match[1];
+            break;
+        } else if (line.length === 0) {
+            break;
+        }
+    }
+
+    if (!version) {
+        return Promise.resolve(true);
+    }
+
+    return new Promise((resolve) => cp.spawn('uncrustify', ['--version'])
+        .stdout
+        .on('data', (data) => output += data.toString())
+        .on('close', () => resolve(output.match(/[\d.]+/)[0])))
+        .then((ver) => ver === version);
 }
 
 function parseConfig(config: string) {

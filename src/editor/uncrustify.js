@@ -1,4 +1,4 @@
-function save(preset) {
+function action(which) {
     var config = {};
 
     for (var input of document.getElementsByTagName('input')) {
@@ -20,8 +20,7 @@ function save(preset) {
     }
 
     var a = document.getElementById('a');
-
-    a.href = encodeURI(`command:uncrustify.save${preset ? 'Preset' : ''}?` + JSON.stringify(config));
+    a.href = encodeURI(`command:uncrustify.${which}?` + JSON.stringify(config));
     a.click();
 }
 

@@ -98,7 +98,7 @@ export function activate(context: vsc.ExtensionContext) {
         return new Promise<string>((resolve) => cp.spawn('uncrustify', ['--version'])
             .stdout
             .on('data', (data) => output += data.toString())
-            .on('close', () => resolve(output.match(/([\d.]+)/)[1])))
+            .on('close', () => resolve(output.match(/[\d.]+/)[0])))
             .then((ver) => new Promise<string>((resolve, reject) => {
                 logger.dbg('uncrustify version: ' + ver);
                 req.get(util.ADDRESS.replace('%VERSION%', ver), (err, res, body) =>
@@ -134,32 +134,45 @@ export function activate(context: vsc.ExtensionContext) {
         }))).catch((reason) => logger.dbg('error saving config file: ' + reason));
     });
 
-    vsc.commands.registerCommand('uncrustify.savePreset', (config) => {
+    vsc.commands.registerCommand('uncrustify.savePreset', (config, name) => {
         logger.dbg('command: savePreset');
 
-        return vsc.window.showInputBox({ placeHolder: 'Name of the preset' })
-            .then((name) => {
-                if (!name) {
-                    vsc.window.showErrorMessage('Name can\'t be empty !');
-                    throw new Error('Name is empty');
-                }
+        let promise = name !== undefined
+            ? Promise.resolve(name)
+            : vsc.window.showInputBox({ placeHolder: 'Name of the preset' });
 
-                logger.dbg('saving preset ' + name);
+        return promise.then((chosenName) => {
+            if (!chosenName && name === undefined) {
+                vsc.window.showErrorMessage('Name can\'t be empty !');
+                throw new Error('Name is empty');
+            }
 
-                let presets = extContext.globalState.get('presets', {});
-                presets[name] = config;
-                return extContext.globalState.update('presets', presets)
-            }).then(() => vsc.window.showInformationMessage('Preset saved !'));
+            logger.dbg('saving preset ' + chosenName);
+
+            let presets = extContext.globalState.get('presets', {});
+            presets[chosenName] = config;
+
+            return extContext.globalState.update('presets', presets)
+        }).then(() => (name === undefined) && vsc.window.showInformationMessage('Preset saved !'));
     });
 
-    presetCommand('loadPreset', (presets, name) => vsc.commands.executeCommand('uncrustify.download')
+    presetCommand('loadPreset', (presets, name, internal) => vsc.commands.executeCommand('uncrustify.download')
         .then(() => vsc.commands.executeCommand('uncrustify.save', presets[name]))
-        .then(() => vsc.window.showInformationMessage('Preset loaded !')));
+        .then(() => !internal && vsc.window.showInformationMessage('Preset loaded !')));
 
-    presetCommand('deletePreset', (presets, name) => {
+    presetCommand('deletePreset', (presets, name, internal) => {
         delete presets[name];
         extContext.globalState.update('presets', presets)
-            .then(() => vsc.window.showInformationMessage('Preset deleted !'));
+            .then(() => !internal && vsc.window.showInformationMessage('Preset deleted !'));
+    });
+
+    vsc.commands.registerCommand('uncrustify.upgrade', (config) => {
+        logger.dbg('command: upgrade');
+
+        vsc.commands.executeCommand('uncrustify.savePreset', config, '')
+            .then(() => vsc.commands.executeCommand('uncrustify.loadPreset', ''))
+            .then(() => vsc.commands.executeCommand('uncrustify.deletePreset', ''))
+            .then(() => vsc.commands.executeCommand('vscode.open', vsc.Uri.file(util.configPath())));
     });
 
     if (vsc.workspace.getConfiguration('uncrustify').get('graphicalConfig')) {
@@ -185,8 +198,8 @@ export function deactivate() { };
 
 export { extContext };
 
-function presetCommand(commandName: string, callback: (presets: any, name: string) => any) {
-    vsc.commands.registerCommand('uncrustify.' + commandName, () => {
+function presetCommand(commandName: string, callback: (presets: any, name: string, internal: boolean) => any) {
+    vsc.commands.registerCommand('uncrustify.' + commandName, (name) => {
         logger.dbg('command: ' + commandName);
 
         let presets = extContext.globalState.get('presets', {});
@@ -201,13 +214,16 @@ function presetCommand(commandName: string, callback: (presets: any, name: strin
             return;
         }
 
-        return vsc.window.showQuickPick(names)
-            .then((name) => {
-                if (!name) {
-                    throw new Error('No preset selected');
-                }
+        let promise = name !== undefined
+            ? Promise.resolve(name)
+            : vsc.window.showQuickPick(names);
 
-                return callback(presets, name);
-            });
+        return promise.then((chosenName) => {
+            if (!chosenName && name === undefined) {
+                throw new Error('No preset selected');
+            }
+
+            return callback(presets, chosenName, name !== undefined);
+        });
     });
 }
