@@ -1,5 +1,9 @@
 # Changelog
 
+### 2.2.0
+- Fixed preset loading that could interrupt config file download
+- Added the ability to upgrade config files when they are not made for the same version as the uncrustify executable
+
 ### 2.1.0
 - Added ability to save and load configuration file presets
 
