@@ -75,9 +75,9 @@
         },
         "commands": [
             {
-                "title": "Download default config file",
+                "title": "Create default config file",
                 "category": "Uncrustify",
-                "command": "uncrustify.download"
+                "command": "uncrustify.create"
             },
             {
                 "title": "Open config file",

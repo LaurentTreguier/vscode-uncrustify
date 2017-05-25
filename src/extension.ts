@@ -86,8 +86,8 @@ export function activate(context: vsc.ExtensionContext) {
     let configurationSub = vsc.workspace.registerTextDocumentContentProvider('uncrustify', new Configurator());
     context.subscriptions.push(configurationSub);
 
-    vsc.commands.registerCommand('uncrustify.download', () => {
-        logger.dbg('command: download');
+    vsc.commands.registerCommand('uncrustify.create', () => {
+        logger.dbg('command: create');
 
         if (!vsc.workspace.rootPath) {
             return vsc.window.showWarningMessage('No folder is open');
@@ -95,15 +95,11 @@ export function activate(context: vsc.ExtensionContext) {
 
         let output = '';
 
-        return new Promise<string>((resolve) => cp.spawn('uncrustify', ['--version'])
+        return new Promise<string>((resolve) => cp.spawn('uncrustify', ['--update-config-with-doc'])
             .stdout
             .on('data', (data) => output += data.toString())
-            .on('close', () => resolve(output.match(/[\d.]+/)[0])))
-            .then((ver) => new Promise<string>((resolve, reject) => {
-                logger.dbg('uncrustify version: ' + ver);
-                req.get(util.ADDRESS.replace('%VERSION%', ver), (err, res, body) =>
-                    err ? reject(err) : resolve(body));
-            })).then((config) => new Promise((resolve) => fs.writeFile(util.configPath(), config, resolve)));
+            .on('close', () => resolve(output)))
+            .then((config) => new Promise((resolve) => fs.writeFile(util.configPath(), config, resolve)));
     });
 
     vsc.commands.registerCommand('uncrustify.open', () =>
@@ -177,7 +173,7 @@ export function activate(context: vsc.ExtensionContext) {
             return;
         }
 
-        return vsc.commands.executeCommand('uncrustify.download')
+        return vsc.commands.executeCommand('uncrustify.create')
             .then(() => vsc.commands.executeCommand('uncrustify.save', presets[name]))
             .then(() => {
                 Configurator.oldConfig = presets[name];
