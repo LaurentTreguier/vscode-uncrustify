@@ -1,5 +1,10 @@
 # Changelog
 
+#### 2.3.0
+- Fixed behavior when invoking uncrustify commands manually when they are not supposed to be
+- Added `uncustify.open` command to open currently used uncrustify config file
+- Replaced `uncrustify.download` command with `uncrustify.create` that creates config files instead of downoading thems
+
 #### 2.2.1
 - Fixed editor css and js files not being loaded
 

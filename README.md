@@ -28,7 +28,7 @@ If the executable is not in the PATH environment variable, you must set its path
 
 ## Uncrustify configuration
 
-A default config file can automatically be downloaded (see the [commands](#extension-commands) below).
+A default config file can automatically be created (see the [commands](#extension-commands) below).
 
 Starting with version 2.0.0, opening the configured config file (or a file named `uncrustify.cfg` at the root of your workspace if it's not configured) will display a graphical editor to easily tweak the configuration file.
 
@@ -42,7 +42,8 @@ Uncrustify's default config file keeps its version at the top of the file; if th
 
 ## Extension commands
 
-* `Uncrustify: Download default config file` (`uncrustify.download`): Downloads a default `uncrustify.cfg` file and puts it at the root of the current workspace.
+* `Uncrustify: Create default config file` (`uncrustify.create`): Creates a default `uncrustify.cfg` file and puts it at the root of the current workspace.
+* `Uncrustify: Open config file` (`uncrustify.open`): Opens the configuration file that is currently set in the extension settings.
 
 ## Extension settings
 
