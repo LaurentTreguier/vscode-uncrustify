@@ -106,6 +106,9 @@ export function activate(context: vsc.ExtensionContext) {
             })).then((config) => new Promise((resolve) => fs.writeFile(util.configPath(), config, resolve)));
     });
 
+    vsc.commands.registerCommand('uncrustify.open', () =>
+        vsc.commands.executeCommand('vscode.open', vsc.Uri.file(util.configPath())));
+
     vsc.commands.registerCommand('uncrustify.save', (config) => {
         logger.dbg('command: save');
 

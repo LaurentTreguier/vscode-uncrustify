@@ -21,5 +21,5 @@ export function configPath() {
 }
 
 export function configUri() {
-    return vsc.Uri.parse(`uncrustify://configuration`);
+    return vsc.Uri.parse('uncrustify://configuration');
 };

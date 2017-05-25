@@ -14,8 +14,7 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider {
         return new Promise((resolve, reject) => {
             token.onCancellationRequested(reject);
 
-            let conf = vsc.workspace.getConfiguration('uncrustify');
-            let configPath = conf.get<string>('configPath') || path.join(vsc.workspace.rootPath, util.CONFIG_FILE_NAME);
+            let configPath = util.configPath();
 
             logger.dbg('config file: ' + configPath);
 
@@ -35,7 +34,7 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider {
                 return;
             }
 
-            let uncrustifyExecutable = conf.get('executablePath', 'uncrustify');
+            let uncrustifyExecutable = vsc.workspace.getConfiguration('uncrustify').get('executablePath', 'uncrustify');
             let args = ['-l', languageMap[document.languageId], '-c', configPath];
             let output = '';
             let error = '';

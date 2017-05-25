@@ -57,9 +57,7 @@
                     "description": "Path to the uncrustify executable"
                 },
                 "uncrustify.configPath": {
-                    "type": [
-                        "string"
-                    ],
+                    "type": "string",
                     "default": null,
                     "description": "Path to the uncrustify configuration file"
                 },
@@ -80,6 +78,11 @@
                 "title": "Download default config file",
                 "category": "Uncrustify",
                 "command": "uncrustify.download"
+            },
+            {
+                "title": "Open config file",
+                "category": "Uncustify",
+                "command": "uncrustify.open"
             },
             {
                 "title": "Save config file",
