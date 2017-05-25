@@ -118,9 +118,9 @@
         "request": "^2.81.0"
     },
     "devDependencies": {
-        "@types/node": "^7.0.14",
-        "@types/request": "^0.0.42",
-        "typescript": "^2.3.2",
+        "@types/node": "^7.0.22",
+        "@types/request": "^0.0.43",
+        "typescript": "^2.3.3",
         "vscode": "^1.1.0"
     }
 }

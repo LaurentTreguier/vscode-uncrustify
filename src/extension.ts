@@ -109,6 +109,11 @@ export function activate(context: vsc.ExtensionContext) {
     vsc.commands.registerCommand('uncrustify.save', (config) => {
         logger.dbg('command: save');
 
+        if (!config) {
+            logger.dbg('error saving config: no config passed');
+            return;
+        }
+
         return new Promise((resolve, reject) => fs.readFile(util.configPath(), (err, data) => {
             if (err) {
                 reject(err);
@@ -137,6 +142,11 @@ export function activate(context: vsc.ExtensionContext) {
     vsc.commands.registerCommand('uncrustify.savePreset', (config, name) => {
         logger.dbg('command: savePreset');
 
+        if (!config) {
+            logger.dbg('error saving preset: no config passed');
+            return;
+        }
+
         let promise = name !== undefined
             ? Promise.resolve(name)
             : vsc.window.showInputBox({ placeHolder: 'Name of the preset' });
@@ -156,17 +166,33 @@ export function activate(context: vsc.ExtensionContext) {
         }).then(() => (name === undefined) && vsc.window.showInformationMessage('Preset saved !'));
     });
 
-    presetCommand('loadPreset', (presets, name, internal) => vsc.commands.executeCommand('uncrustify.download')
-        .then(() => vsc.commands.executeCommand('uncrustify.save', presets[name]))
-        .then(() => {
-            Configurator.oldConfig = presets[name];
+    presetCommand('loadPreset', (presets, name, internal) => {
+        logger.dbg('command: loadPreset');
 
-            if (!internal) {
-                vsc.window.showInformationMessage('Preset loaded !');
-            }
-        }));
+        if (!presets || !name) {
+            logger.dbg('error loading presets');
+            return;
+        }
+
+        return vsc.commands.executeCommand('uncrustify.download')
+            .then(() => vsc.commands.executeCommand('uncrustify.save', presets[name]))
+            .then(() => {
+                Configurator.oldConfig = presets[name];
+
+                if (!internal) {
+                    vsc.window.showInformationMessage('Preset loaded !');
+                }
+            });
+    });
 
     presetCommand('deletePreset', (presets, name, internal) => {
+        logger.dbg('command: deletePreset');
+
+        if (!presets || !name) {
+            logger.dbg('error loading presets');
+            return;
+        }
+
         delete presets[name];
         return extContext.globalState.update('presets', presets)
             .then(() => !internal && vsc.window.showInformationMessage('Preset deleted !'));
@@ -174,6 +200,11 @@ export function activate(context: vsc.ExtensionContext) {
 
     vsc.commands.registerCommand('uncrustify.upgrade', (config) => {
         logger.dbg('command: upgrade');
+
+        if (!config) {
+            logger.dbg('error upgrading config: no config passed');
+            return;
+        }
 
         return vsc.commands.executeCommand('uncrustify.savePreset', config, '')
             .then(() => vsc.commands.executeCommand('uncrustify.loadPreset', ''))
