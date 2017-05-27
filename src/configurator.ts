@@ -8,9 +8,9 @@ import * as logger from './logger';
 import * as util from './util';
 
 const typesMap = {
-    string: 'text',
-    number: 'number',
-    'false/true': 'checkbox'
+    string: ['text', /".*"/],
+    number: ['number', /\d+/],
+    'false/true': ['checkbox', /false|true/]
 };
 
 export default class Configurator implements vsc.TextDocumentContentProvider {
@@ -97,7 +97,7 @@ function checkVersion(config: string) {
     let output = '';
 
     for (let line of config.split(/\r?\n/)) {
-        let match = line.match(/^#\s*uncrustify\s*([\d.]+)/i);
+        let match = line.match(/^#\s*uncrustify\s+(\S+)/i);
 
         if (match) {
             version = match[1];
@@ -114,7 +114,7 @@ function checkVersion(config: string) {
     return new Promise((resolve) => cp.spawn('uncrustify', ['--version'])
         .stdout
         .on('data', (data) => output += data.toString())
-        .on('close', () => resolve(output.match(/[\d.]+/)[0])))
+        .on('close', () => resolve(output.match(/uncrustify\s+(\S+)/i)[1])))
         .then((ver) => ver === version);
 }
 
@@ -125,6 +125,7 @@ function parseConfig(config: string) {
     let table = new Node('table');
     let commentAccumulator = '';
     let instructionNode: Node;
+    let customValue: any;
 
     config.split(/\r?\n/).forEach((line) => {
         if (line.length <= 1) {
@@ -143,6 +144,12 @@ function parseConfig(config: string) {
                 if (instructionNode) {
                     let tr = new Node('tr');
                     let td: Node;
+                    let customNode = new Node('input', {
+                        type: 'text',
+                        name: instructionNode.data.name,
+                        placeholder: 'custom value',
+                        title: 'This raw value will override the normal one in the file'
+                    });
 
                     if (Configurator.oldConfig) {
                         td = new Node('td', {
@@ -154,12 +161,20 @@ function parseConfig(config: string) {
                         tr.children.push(td);
                     }
 
+                    if (customValue) {
+                        customNode.data.value = customValue;
+                    }
+
                     td = new Node('td');
                     td.children.push(new Node('p', instructionNode.data.name));
                     tr.children.push(td);
 
                     td = new Node('td');
                     td.children.push(instructionNode);
+                    tr.children.push(td);
+
+                    td = new Node('td');
+                    td.children.push(customNode);
                     tr.children.push(td);
 
                     tr.children.push(new Node('td', commentAccumulator));
@@ -180,7 +195,7 @@ function parseConfig(config: string) {
             commentAccumulator += os.EOL + comment[1];
         } else if (instruction) {
             instructionNode = new Node('input', {
-                type: typesMap[instruction[3]],
+                type: typesMap[instruction[3]] && typesMap[instruction[3]][0],
                 name: instruction[1],
                 placeholder: instruction[3]
             });
@@ -189,13 +204,15 @@ function parseConfig(config: string) {
                 if (instruction[2] === 'true') {
                     instructionNode.data.checked = null;
                 }
-            } else {
+            } else if (instructionNode.data.type && instruction[2].match(typesMap[instruction[3]][1])) {
                 instructionNode.data.value = instruction[2].replace(/^"(.*)"$/, '$1');
             }
 
-            let answers = instruction[3].split('/');
+            customValue = instruction[2];
 
             if (!instructionNode.data.type) {
+                let answers = instruction[3].split('/');
+
                 if (answers.length > 1) {
                     instructionNode = new Node('select', { name: instruction[1] });
                     answers.forEach((answer) => {
@@ -203,6 +220,7 @@ function parseConfig(config: string) {
 
                         if (answer === instruction[2]) {
                             data.selected = null;
+                            customValue = null;
                         }
 
                         instructionNode.children.push(new Node('option', data));
@@ -210,6 +228,8 @@ function parseConfig(config: string) {
                 } else {
                     instructionNode.data.type = 'text';
                 }
+            } else if (instruction[2].match(typesMap[instruction[3]][1])) {
+                customValue = null;
             }
         }
     });

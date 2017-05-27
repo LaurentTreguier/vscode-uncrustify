@@ -1,6 +1,10 @@
 function action(which) {
     var config = {};
 
+    for (var select of document.getElementsByTagName('select')) {
+        config[select.name] = select.value;
+    }
+
     for (var input of document.getElementsByTagName('input')) {
         switch (input.type) {
             case 'number':
@@ -10,13 +14,16 @@ function action(which) {
                 config[input.name] = input.checked;
                 break;
             default:
-                config[input.name] = `"${input.value}"`;
+                if (input.title) {
+                    if (input.value) {
+                        config[input.name] = input.value;
+                    }
+                } else {
+                    config[input.name] = `"${input.value}"`;
+                }
+
                 break;
         }
-    }
-
-    for (var input of document.getElementsByTagName('select')) {
-        config[input.name] = input.value;
     }
 
     var a = document.getElementById('a');
