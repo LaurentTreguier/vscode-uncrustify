@@ -190,7 +190,7 @@ function parseConfig(config: string) {
                     instructionNode.data.checked = null;
                 }
             } else {
-                instructionNode.data.value = instruction[2];
+                instructionNode.data.value = instruction[2].replace(/^"(.*)"$/, '$1');
             }
 
             let answers = instruction[3].split('/');
