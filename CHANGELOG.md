@@ -1,8 +1,12 @@
 # Changelog
 
-#### 2.3.0
-- Fixed behavior when invoking uncrustify commands manually when they are not supposed to be
-- Added `uncustify.open` command to open currently used uncrustify config file
+### 2.4.0
+- Fixed string values not being displayed in graphical config editor
+- Added text box to graphical config editor for custom values (#8)
+
+### 2.3.0
+- Fixed behavior when invoking uncrustify commands manually when they are not supposed to be (#7)
+- Added `uncustify.open` command to open currently used uncrustify config file (#7)
 - Replaced `uncrustify.download` command with `uncrustify.create` that creates config files instead of downoading thems
 
 #### 2.2.1
@@ -25,7 +29,7 @@
 - Added command to automatically download a default config file for uncrustify
 
 #### 1.5.6
-- Removed useless error message appearing even when everything is fine; this time it's workng I swear
+- Removed useless error message appearing even when everything is fine; this time it's working I swear
 
 #### 1.5.5
 - Removed forgotten test that forced uncrustify not to work...
