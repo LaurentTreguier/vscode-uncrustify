@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.4.1
+- Fixed extension activation (#10)
+
 ### 2.4.0
 - Fixed string values not being displayed in graphical config editor
 - Added text box to graphical config editor for custom values (#8)
