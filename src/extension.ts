@@ -61,7 +61,7 @@ export function activate(context: vsc.ExtensionContext) {
                     installerChoices[choice] = installer;
                 });
 
-                return vsc.window.showWarningMessage(message, ...choices);
+                return vsc.window.showWarningMessage(message, ...choices).then((choice) => choice);
             }
         }).then((choice) => {
             logger.dbg('installer choice: ' + choice);

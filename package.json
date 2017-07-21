@@ -42,9 +42,13 @@
         "onLanguage:pawn",
         "onLanguage:vala",
         "workspaceContains:uncrustify.cfg",
-        "onCommand:uncrustify.download",
+        "onCommand:uncrustify.create",
+        "onCommand:uncrustify.open",
+        "onCommand:uncrustify.save",
+        "onCommand:uncrustify.savePreset",
         "onCommand:uncrustify.loadPreset",
-        "onCommand:uncrustify.deletePreset"
+        "onCommand:uncrustify.deletePreset",
+        "onCommand:uncrustify.upgrade"
     ],
     "main": "./out/src/extension",
     "contributes": {
@@ -121,9 +125,9 @@
         "request": "^2.81.0"
     },
     "devDependencies": {
-        "@types/node": "^7.0.22",
-        "@types/request": "^0.0.43",
-        "typescript": "^2.3.3",
+        "@types/node": "^8.0.14",
+        "@types/request": "^2.0.0",
+        "typescript": "^2.4.2",
         "vscode": "^1.1.0"
     }
 }

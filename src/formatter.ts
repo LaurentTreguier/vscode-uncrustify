@@ -10,7 +10,7 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider {
         document: vsc.TextDocument,
         options: vsc.FormattingOptions,
         token: vsc.CancellationToken
-    ) {
+    ): Thenable<vsc.TextEdit[]> {
         return new Promise((resolve, reject) => {
             token.onCancellationRequested(reject);
 
