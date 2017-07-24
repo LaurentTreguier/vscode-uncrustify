@@ -1,5 +1,8 @@
 # Changelog
 
+### 2.5.0
+- Added range formatting
+
 #### 2.4.2
 - Fixed (hopefully) `uncrustify.create` not filling `uncrustify.cfg`
 
