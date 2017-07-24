@@ -98,7 +98,7 @@ export function activate(context: vsc.ExtensionContext) {
         return new Promise<string>((resolve) => cp.spawn('uncrustify', ['--update-config-with-doc'])
             .stdout
             .on('data', (data) => output += data.toString())
-            .on('close', () => resolve(output)))
+            .on('end', () => resolve(output)))
             .then((config) => new Promise((resolve) => fs.writeFile(util.configPath(), config, resolve)));
     });
 
