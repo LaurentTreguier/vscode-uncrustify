@@ -69,7 +69,7 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
             uncrustify.on('exit', (code) => {
                 logger.dbg('uncrustify exited with status: ' + code);
 
-                if (code !== 0) {
+                if (code < 0) {
                     vsc.window.showErrorMessage('Uncrustify exited with error code: ' + code);
                     reject(code);
                 }
@@ -86,7 +86,7 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
             uncrustify.stderr.on('data', (data) => error += data);
             uncrustify.stderr.on('close', () => logger.dbg('uncrustify exited with error: ' + error));
 
-            uncrustify.stdin.write(document.getText(range));
+            uncrustify.stdin.write((range ? document.getText(range) : document.getText()));
             uncrustify.stdin.end();
         });
     }
