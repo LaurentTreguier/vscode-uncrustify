@@ -1,5 +1,9 @@
 # Changelog
 
+#### 2.5.1
+- Fixed document formatting potentially not working (#11, #12)
+- Fixed range formatting showing errors (#12)
+
 ### 2.5.0
 - Added range formatting
 
