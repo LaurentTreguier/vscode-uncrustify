@@ -86,7 +86,7 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
             uncrustify.stderr.on('data', (data) => error += data);
             uncrustify.stderr.on('close', () => logger.dbg('uncrustify exited with error: ' + error));
 
-            uncrustify.stdin.write((range ? document.getText(range) : document.getText()));
+            uncrustify.stdin.write((document.getText(range)));
             uncrustify.stdin.end();
         });
     }

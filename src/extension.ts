@@ -100,7 +100,20 @@ export function activate(context: vsc.ExtensionContext) {
             .stdout
             .on('data', (data) => output += data.toString())
             .on('end', () => resolve(output)))
-            .then((config) => new Promise((resolve) => fs.writeFile(util.configPath(), config, resolve)));
+            .then((config) => new Promise<boolean>((resolve) => {
+                fs.access(util.configPath(), fs.constants.F_OK, (err) => {
+                    if (err) {
+                        resolve(true);
+                    } else {
+                        vsc.window.showWarningMessage('Configuration file already exists', 'Overwrite')
+                            .then((choice) => resolve(choice === 'Overwrite'));
+                    }
+                });
+            }).then((writeConfig) => {
+                if (writeConfig) {
+                    return new Promise((resolve) => fs.writeFile(util.configPath(), config, resolve));
+                }
+            }));
     });
 
     vsc.commands.registerCommand('uncrustify.open', () =>
