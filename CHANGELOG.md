@@ -1,5 +1,8 @@
 # Changelog
 
+### 2.6.0
+- Added a warning message before overwriting an already existing config file
+
 #### 2.5.1
 - Fixed document formatting potentially not working (#11, #12)
 - Fixed range formatting showing errors (#12)
