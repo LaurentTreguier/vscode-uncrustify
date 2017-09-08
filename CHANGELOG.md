@@ -1,5 +1,8 @@
 # Changelog
 
+### 2.7.0
+- Added support for multi-root workspaces
+
 ### 2.6.0
 - Added a warning message before overwriting an already existing config file
 
