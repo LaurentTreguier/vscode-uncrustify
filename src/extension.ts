@@ -61,7 +61,7 @@ export function activate(context: vsc.ExtensionContext) {
                     installerChoices[choice] = installer;
                 });
 
-                return vsc.window.showWarningMessage(message, ...choices).then((choice) => choice);
+                return <PromiseLike<string>>vsc.window.showWarningMessage(message, ...choices).then((choice) => choice);
             }
         }).then((choice) => {
             logger.dbg('installer choice: ' + choice);
@@ -90,7 +90,7 @@ export function activate(context: vsc.ExtensionContext) {
     vsc.commands.registerCommand('uncrustify.create', () => {
         logger.dbg('command: create');
 
-        if (!vsc.workspace.rootPath) {
+        if (!vsc.workspace.workspaceFolders || !vsc.workspace.workspaceFolders.length) {
             return vsc.window.showWarningMessage('No folder is open');
         }
 

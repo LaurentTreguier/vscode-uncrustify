@@ -16,8 +16,11 @@ export const MODES = [
 ];
 
 export function configPath() {
+    let folder = vsc.window.activeTextEditor
+        ? vsc.workspace.getWorkspaceFolder(vsc.window.activeTextEditor.document.uri)
+        : vsc.workspace.workspaceFolders && vsc.workspace.workspaceFolders[0];
     return vsc.workspace.getConfiguration('uncrustify')
-        .get<string>('configPath') || path.join(vsc.workspace.rootPath, CONFIG_FILE_NAME);
+        .get<string>('configPath') || path.join(folder.uri.fsPath, CONFIG_FILE_NAME);
 }
 
 export function configUri() {

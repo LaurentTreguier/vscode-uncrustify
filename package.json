@@ -19,7 +19,7 @@
         "url": "https://github.com/LaurentTreguier/vscode-uncrustify/issues"
     },
     "engines": {
-        "vscode": "^1.6.0"
+        "vscode": "^1.16.0"
     },
     "categories": [
         "Languages",
@@ -58,22 +58,26 @@
                 "uncrustify.executablePath": {
                     "type": "string",
                     "default": "uncrustify",
-                    "description": "Path to the uncrustify executable"
+                    "description": "Path to the uncrustify executable",
+                    "scope": "window"
                 },
                 "uncrustify.configPath": {
                     "type": "string",
                     "default": null,
-                    "description": "Path to the uncrustify configuration file"
+                    "description": "Path to the uncrustify configuration file",
+                    "scope": "resource"
                 },
                 "uncrustify.graphicalConfig": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Toggles the graphical config editor"
+                    "description": "Toggles the graphical config editor",
+                    "scope": "window"
                 },
                 "uncrustify.debug": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Activates logs for debugging the extension"
+                    "description": "Activates logs for debugging the extension",
+                    "scope": "window"
                 }
             }
         },
@@ -125,9 +129,9 @@
         "request": "^2.81.0"
     },
     "devDependencies": {
-        "@types/node": "^8.0.15",
-        "@types/request": "^2.0.0",
-        "typescript": "^2.4.2",
-        "vscode": "^1.1.4"
+        "@types/node": "^8.0.27",
+        "@types/request": "^2.0.3",
+        "typescript": "^2.5.2",
+        "vscode": "^1.1.5"
     }
 }
