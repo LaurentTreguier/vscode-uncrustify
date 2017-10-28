@@ -19,8 +19,14 @@ export function configPath() {
     let folder = vsc.window.activeTextEditor
         ? vsc.workspace.getWorkspaceFolder(vsc.window.activeTextEditor.document.uri)
         : vsc.workspace.workspaceFolders && vsc.workspace.workspaceFolders[0];
-    return vsc.workspace.getConfiguration('uncrustify')
+    let p = vsc.workspace.getConfiguration('uncrustify')
         .get<string>('configPath') || path.join(folder.uri.fsPath, CONFIG_FILE_NAME);
+
+    if (!path.isAbsolute(p)) {
+        p = path.join(folder.uri.fsPath, p);
+    }
+
+    return p;
 }
 
 export function configUri() {
