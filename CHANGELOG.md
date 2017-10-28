@@ -1,5 +1,8 @@
 # Changelog
 
+### 2.7.1
+- Added relative paths support for config file (#14)
+
 ### 2.7.0
 - Added support for multi-root workspaces
 
