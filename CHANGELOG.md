@@ -1,5 +1,8 @@
 # Changelog
 
+### 2.7.2
+- Fixed extension not working with uncrustify 0.65
+
 ### 2.7.1
 - Added relative paths support for config file (#14)
 
