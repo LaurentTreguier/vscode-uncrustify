@@ -99,7 +99,7 @@ export function activate(context: vsc.ExtensionContext) {
         return new Promise<string>((resolve) => cp.spawn('uncrustify', ['--update-config-with-doc'])
             .stdout
             .on('data', (data) => output += data.toString())
-            .on('end', () => resolve(output)))
+            .on('end', () => resolve(output.replace(/\?\?\?:.*/g, ''))))
             .then((config) => new Promise<boolean>((resolve) => {
                 fs.access(util.configPath(), fs.constants.F_OK, (err) => {
                     if (err) {

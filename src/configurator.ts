@@ -10,6 +10,7 @@ import * as util from './util';
 const typesMap = {
     string: ['text', /".*"/],
     number: ['number', /\d+/],
+    'unsigned number': ['number', /\d+/],
     'false/true': ['checkbox', /false|true/]
 };
 
