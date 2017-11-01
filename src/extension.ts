@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as cp from 'child_process';
 import * as vsc from 'vscode';
@@ -95,25 +95,29 @@ export function activate(context: vsc.ExtensionContext) {
         }
 
         let output = '';
+        let error = new Error('Configuration file already exists');
 
-        return new Promise<string>((resolve) => cp.spawn('uncrustify', ['--update-config-with-doc'])
-            .stdout
-            .on('data', (data) => output += data.toString())
-            .on('end', () => resolve(output.replace(/\?\?\?:.*/g, ''))))
-            .then((config) => new Promise<boolean>((resolve) => {
-                fs.access(util.configPath(), fs.constants.F_OK, (err) => {
-                    if (err) {
-                        resolve(true);
-                    } else {
-                        vsc.window.showWarningMessage('Configuration file already exists', 'Overwrite')
-                            .then((choice) => resolve(choice === 'Overwrite'));
+        return fs.access(util.configPath(), fs.constants.F_OK)
+            .then(() => vsc.window.showWarningMessage('Configuration file already exists', 'Overwrite')
+                .then((choice) => {
+                    if (choice !== 'Overwrite') {
+                        throw error;
                     }
-                });
-            }).then((writeConfig) => {
-                if (writeConfig) {
-                    return new Promise((resolve) => fs.writeFile(util.configPath(), config, resolve));
+                })
+            ).catch((e) => {
+                if (e === error) {
+                    throw e;
+                } else {
+                    return fs.ensureFile(util.configPath());
                 }
-            }));
+            })
+            .then(() => new Promise((resolve) =>
+                cp.spawn('uncrustify', ['-c', util.configPath(), '--update-config-with-doc'])
+                    .stdout
+                    .on('data', (data) => output += data.toString())
+                    .on('end', () => resolve(output.replace(/\?\?\?:.*/g, '')))
+            )).then((config) => fs.writeFile(util.configPath(), config))
+            .catch((reason) => logger.dbg(reason));
     });
 
     vsc.commands.registerCommand('uncrustify.open', () =>
