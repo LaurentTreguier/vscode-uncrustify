@@ -1,5 +1,8 @@
 # Changelog
 
+### 2.7.3
+- Fixed default config file not being created with older version of uncrustify
+
 ### 2.7.2
 - Fixed extension not working with uncrustify 0.65
 
