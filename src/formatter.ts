@@ -101,5 +101,6 @@ const languageMap = {
     'java': 'JAVA',
     'objective-c': 'OC',
     'pawn': 'PAWN',
+    'pde': 'JAVA',
     'vala': 'VALA'
 };

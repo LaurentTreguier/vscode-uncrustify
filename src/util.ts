@@ -12,6 +12,7 @@ export const MODES = [
     'java',
     'objective-c',
     'pawn',
+    'pde',
     'vala'
 ];
 
