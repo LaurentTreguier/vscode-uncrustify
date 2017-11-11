@@ -1,12 +1,15 @@
 # Changelog
 
-### 2.7.3
+### 2.8.0
+- Added support for PDE to be formatted as Java (#16)
+
+#### 2.7.3
 - Fixed default config file not being created with older version of uncrustify
 
-### 2.7.2
+#### 2.7.2
 - Fixed extension not working with uncrustify 0.65
 
-### 2.7.1
+#### 2.7.1
 - Added relative paths support for config file (#14)
 
 ### 2.7.0
