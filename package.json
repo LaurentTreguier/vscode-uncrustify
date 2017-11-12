@@ -29,7 +29,8 @@
         "uncrustify",
         "format",
         "formatting",
-        "formatter"
+        "formatter",
+        "multi-root ready"
     ],
     "activationEvents": [
         "onLanguage:apex",
