@@ -25,12 +25,12 @@ export function activate(context: vsc.ExtensionContext) {
             packagekit: 'uncrustify',
             brew: 'uncrustify',
             fallback: {
-                version: {
-                    feed: 'https://sourceforge.net/projects/uncrustify/rss?path=/',
-                    regexp: /uncrustify\/uncrustify-([\d.]+)\/uncrustify-\1-win32\.zip/
-                },
                 win32: {
                     source: 'http://downloads.sourceforge.net/project/uncrustify/uncrustify/uncrustify-%VERSION%/uncrustify-%VERSION%-win32.zip',
+                    version: {
+                        feed: 'https://sourceforge.net/projects/uncrustify/rss?path=/',
+                        regexp: /uncrustify\/uncrustify-([\d.]+)\/uncrustify-\1-win32\.zip/
+                    },
                     bin: '.'
                 }
             }

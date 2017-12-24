@@ -1,7 +1,6 @@
 import * as path from 'path';
 import * as vsc from 'vscode';
 
-export const ADDRESS = 'https://raw.githubusercontent.com/uncrustify/uncrustify/uncrustify-%VERSION%/documentation/htdocs/default.cfg';
 export const CONFIG_FILE_NAME = 'uncrustify.cfg';
 export const MODES = [
     'apex',
