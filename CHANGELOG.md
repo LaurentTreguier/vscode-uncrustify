@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.8.2
+- Fixed configuration file upgrading
+
 #### 2.8.1
 - Fixed installation/upgrade of uncrustify on Windows
 
