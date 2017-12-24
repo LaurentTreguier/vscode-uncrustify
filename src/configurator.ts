@@ -98,7 +98,7 @@ function checkVersion(config: string) {
     let output = '';
 
     for (let line of config.split(/\r?\n/)) {
-        let match = line.match(/^#\s*uncrustify\s+(\S+)/i);
+        let match = line.match(/^#\s*uncrustify(?:\s+|-)(\S+)/i);
 
         if (match) {
             version = match[1];
@@ -115,7 +115,7 @@ function checkVersion(config: string) {
     return new Promise((resolve) => cp.spawn('uncrustify', ['--version'])
         .stdout
         .on('data', (data) => output += data.toString())
-        .on('close', () => resolve(output.match(/uncrustify\s+(\S+)/i)[1])))
+        .on('close', () => resolve(output.match(/[\d.]+/)[0])))
         .then((ver) => ver === version);
 }
 

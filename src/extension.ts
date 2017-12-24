@@ -186,7 +186,7 @@ export function activate(context: vsc.ExtensionContext) {
     presetCommand('loadPreset', (presets, name, internal) => {
         logger.dbg('command: loadPreset');
 
-        if (!presets || !name) {
+        if (!presets || (!name && name !== '')) {
             logger.dbg('error loading presets');
             return;
         }
@@ -205,7 +205,7 @@ export function activate(context: vsc.ExtensionContext) {
     presetCommand('deletePreset', (presets, name, internal) => {
         logger.dbg('command: deletePreset');
 
-        if (!presets || !name) {
+        if (!presets || (!name && name !== '')) {
             logger.dbg('error loading presets');
             return;
         }
