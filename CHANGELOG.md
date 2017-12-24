@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.8.1
+- Fixed installation/upgrade of uncrustify on Windows
+
 ### 2.8.0
 - Added support for PDE to be formatted as Java (#16)
 
