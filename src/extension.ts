@@ -45,7 +45,7 @@ export function activate(context: vsc.ExtensionContext) {
                     message = 'Uncrustify can be upgraded';
                     return upgradable;
                 })
-                : Promise.resolve(!installed);
+                : Promise.resolve(!installed && vsc.workspace.getConfiguration('uncrustify').get<string>('executablePath') === null);
         }).then((shouldInstall) => {
             logger.dbg('should uncrustify be installed: ' + shouldInstall);
             return shouldInstall ? pkg.getInstallers(uncrustify) : null;
@@ -229,7 +229,7 @@ export function activate(context: vsc.ExtensionContext) {
             .then(() => vsc.commands.executeCommand('vscode.open', vsc.Uri.file(util.configPath())));
     });
 
-    if (vsc.workspace.getConfiguration('uncrustify').get('graphicalConfig')) {
+    if (vsc.workspace.getConfiguration('uncrustify').get('graphicalConfig', true)) {
         function graphicalEdit(doc: vsc.TextDocument) {
             if (doc.uri.scheme === 'file' && doc.fileName === util.configPath()) {
                 logger.dbg('launching graphical editor');

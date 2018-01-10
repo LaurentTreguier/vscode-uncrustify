@@ -58,8 +58,11 @@
             "title": "Uncrustify configuration",
             "properties": {
                 "uncrustify.executablePath": {
-                    "type": "string",
-                    "default": "uncrustify",
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null,
                     "description": "Path to the uncrustify executable",
                     "scope": "window"
                 },
@@ -136,7 +139,7 @@
     },
     "devDependencies": {
         "@types/fs-extra": "^4.0.7",
-        "@types/node": "^8.5.2",
+        "@types/node": "^8.5.8",
         "@types/request": "^2.0.9",
         "typescript": "^2.6.2",
         "vsce": "^1.35.0",

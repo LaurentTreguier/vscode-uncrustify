@@ -53,7 +53,7 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
                 return;
             }
 
-            let uncrustifyExecutable = vsc.workspace.getConfiguration('uncrustify').get('executablePath', 'uncrustify');
+            let uncrustifyExecutable = vsc.workspace.getConfiguration('uncrustify').get('executablePath', 'uncrustify') || 'uncrustify';
             let args = ['-l', languageMap[document.languageId], '-c', configPath];
             let output = '';
             let error = '';
