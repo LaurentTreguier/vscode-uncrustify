@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.8.3
+- Fixed constant prompting to install uncrustify when using a custom installation path (#21)
+
 #### 2.8.2
 - Fixed configuration file upgrading
 
