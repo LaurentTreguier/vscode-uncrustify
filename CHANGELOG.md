@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.8.4
+- Fixed formatting potentially erasing all text from a file containing a syntax error
+
 #### 2.8.3
 - Fixed constant prompting to install uncrustify when using a custom installation path (#21)
 
