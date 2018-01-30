@@ -77,10 +77,13 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
 
             uncrustify.stdout.on('data', (data) => output += data);
             uncrustify.stdout.on('close', () => {
-                let lastLine = document.lineCount - 1;
-                let lastCol = document.lineAt(lastLine).text.length;
-
-                resolve([new vsc.TextEdit(range || new vsc.Range(0, 0, lastLine, lastCol), output)]);
+                if (output.length) {
+                    let lastLine = document.lineCount - 1;
+                    let lastCol = document.lineAt(lastLine).text.length;
+                    resolve([new vsc.TextEdit(range || new vsc.Range(0, 0, lastLine, lastCol), output)]);
+                } else {
+                    reject();
+                }
             });
 
             uncrustify.stderr.on('data', (data) => error += data);
