@@ -112,7 +112,7 @@ export function activate(context: vsc.ExtensionContext) {
                 }
             })
             .then(() => new Promise((resolve) =>
-                cp.spawn('uncrustify', ['-c', util.configPath(), '--update-config-with-doc'])
+                cp.spawn(util.UNCRUSTIFY_EXECUTABLE, ['-c', util.configPath(), '--update-config-with-doc'])
                     .stdout
                     .on('data', (data) => output += data.toString())
                     .on('end', () => resolve(output.replace(/\?\?\?:.*/g, '')))

@@ -53,7 +53,6 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
                 return;
             }
 
-            let uncrustifyExecutable = vsc.workspace.getConfiguration('uncrustify').get('executablePath', 'uncrustify') || 'uncrustify';
             let args = ['-l', languageMap[document.languageId], '-c', configPath];
             let output = '';
             let error = '';
@@ -62,9 +61,9 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
                 args.push('--frag');
             }
 
-            let uncrustify = cp.spawn(uncrustifyExecutable, args);
+            let uncrustify = cp.spawn(util.UNCRUSTIFY_EXECUTABLE, args);
 
-            logger.dbg(`launched: ${uncrustifyExecutable} ${args.join(' ')}`);
+            logger.dbg(`launched: ${util.UNCRUSTIFY_EXECUTABLE} ${args.join(' ')}`);
             uncrustify.on('error', reject);
             uncrustify.on('exit', (code) => {
                 logger.dbg('uncrustify exited with status: ' + code);
