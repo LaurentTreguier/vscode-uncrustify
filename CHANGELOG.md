@@ -1,5 +1,9 @@
 # Changelog
 
+#### 2.8.5
+- Fixed problems with uncrustify executable path (#23, #24)
+- Updated config parsing to support even barebone config files without any comment (#20)
+
 #### 2.8.4
 - Fixed formatting potentially erasing all text from a file containing a syntax error
 

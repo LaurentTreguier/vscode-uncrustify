@@ -164,7 +164,7 @@ export function activate(context: vsc.ExtensionContext) {
             return;
         }
 
-        let promise = name !== undefined
+        let promise: Thenable<string> = name !== undefined
             ? Promise.resolve(name)
             : vsc.window.showInputBox({ placeHolder: 'Name of the preset' });
 
@@ -268,7 +268,7 @@ function presetCommand(commandName: string, callback: (presets: any, name: strin
             return;
         }
 
-        let promise = name !== undefined
+        let promise: Thenable<string> = name !== undefined
             ? Promise.resolve(name)
             : vsc.window.showQuickPick(names);
 
