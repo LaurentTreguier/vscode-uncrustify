@@ -29,6 +29,10 @@ export function configPath() {
     return p;
 }
 
+export function executablePath() {
+    return vsc.workspace.getConfiguration('uncrustify').get('executablePath', 'uncrustify') || 'uncrustify';
+}
+
 export function configUri() {
     return vsc.Uri.parse('uncrustify://configuration');
 };

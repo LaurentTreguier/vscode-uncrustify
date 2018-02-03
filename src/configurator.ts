@@ -112,7 +112,7 @@ function checkVersion(config: string) {
         return Promise.resolve(true);
     }
 
-    return new Promise((resolve) => cp.spawn('uncrustify', ['--version'])
+    return new Promise((resolve) => cp.spawn(util.executablePath(), ['--version'])
         .stdout
         .on('data', (data) => output += data.toString())
         .on('close', () => resolve(output.match(/[\d.]+/)[0])))
