@@ -38,3 +38,9 @@ function toggle(event) {
 
     table.style.display = table.style.display !== 'initial' ? 'initial' : 'none';
 }
+
+let tables = document.getElementsByTagName('table');
+
+if (tables.length === 1) {
+    tables[0].style.display = 'initial';
+}

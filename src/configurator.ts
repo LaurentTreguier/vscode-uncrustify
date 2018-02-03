@@ -11,7 +11,8 @@ const typesMap = {
     string: ['text', /".*"/],
     number: ['number', /\d+/],
     'unsigned number': ['number', /\d+/],
-    'false/true': ['checkbox', /false|true/]
+    'false/true': ['checkbox', /false|true/],
+    get: (key: string) => typesMap[key] || typesMap.string
 };
 
 export default class Configurator implements vsc.TextDocumentContentProvider {
@@ -30,19 +31,19 @@ export default class Configurator implements vsc.TextDocumentContentProvider {
 
                 let head = new Node('head');
                 let style = new Node('link', { rel: 'stylesheet', href: path.join(resourcepath, 'uncrustify.css') }, true);
-                let script = new Node('script', { src: path.join(resourcepath, 'uncrustify.js') });
 
                 let body = new Node('body');
                 let actions = new Node('div', { id: 'actions' });
-                let save = new Node('h3', { _: 'SAVE', onclick: 'action(\'save\')' });
-                let savePreset = new Node('h3', { _: 'SAVE PRESET', onclick: 'action(\'savePreset\')' });
-                let upgrade = new Node('h3', { _: 'UPGRADE CONFIG', onclick: 'action(\'upgrade\')' });
+                let save = new Node('h3', { _: 'SAVE', onclick: `action('save')` });
+                let savePreset = new Node('h3', { _: 'SAVE PRESET', onclick: `action('savePreset')` });
+                let upgrade = new Node('h3', { _: 'UPGRADE CONFIG', onclick: `action('upgrade')` });
                 let form = new Node('form');
                 let a = new Node('a', { id: 'a', display: 'none' });
+                let script = new Node('script', { src: path.join(resourcepath, 'uncrustify.js') });
 
                 html.children.push(head, body);
-                head.children.push(style, script);
-                body.children.push(actions, form, a);
+                head.children.push(style);
+                body.children.push(actions, form, a, script);
                 actions.children.push(save, savePreset);
                 form.children = parseConfig(result.config);
 
@@ -109,7 +110,7 @@ function checkVersion(config: string) {
     }
 
     if (!version) {
-        return Promise.resolve(true);
+        return Promise.resolve(false);
     }
 
     return new Promise((resolve) => cp.spawn(util.executablePath(), ['--version'])
@@ -129,74 +130,74 @@ function parseConfig(config: string) {
     let customValue: any;
 
     config.split(/\r?\n/).forEach((line) => {
-        if (line.length <= 1) {
-            if (line.length === 0) {
-                if (commentAccumulator.length !== 0 && !instructionNode) {
-                    if (table.children.length) {
-                        nodes.push(table);
-                    } else {
-                        nodes.pop();
-                    }
-
-                    nodes.push(new Node('h2', { _: commentAccumulator, onclick: 'toggle(event)' }));
-                    table = new Node('table');
-                }
-
-                if (instructionNode) {
-                    let tr = new Node('tr');
-                    let td: Node;
-                    let customNode = new Node('input', {
-                        type: 'text',
-                        name: instructionNode.data.name,
-                        placeholder: 'custom value',
-                        title: 'This raw value will override the normal one in the file'
-                    });
-
-                    if (Configurator.oldConfig) {
-                        td = new Node('td', {
-                            _: Configurator.oldConfig[instructionNode.data.name] === undefined
-                                ? 'NEW'
-                                : '',
-                            class: 'new-item'
-                        });
-                        tr.children.push(td);
-                    }
-
-                    if (customValue) {
-                        customNode.data.value = customValue;
-                    }
-
-                    td = new Node('td');
-                    td.children.push(new Node('p', instructionNode.data.name));
-                    tr.children.push(td);
-
-                    td = new Node('td');
-                    td.children.push(instructionNode);
-                    tr.children.push(td);
-
-                    td = new Node('td');
-                    td.children.push(customNode);
-                    tr.children.push(td);
-
-                    tr.children.push(new Node('td', commentAccumulator));
-                    table.children.push(tr);
-                }
-
-                commentAccumulator = '';
-                instructionNode = null;
-            }
-
+        if (line.length === 1) {
             return;
         }
 
+        if (line.length === 0) {
+            if (commentAccumulator.length && !instructionNode) {
+                if (table.children.length) {
+                    nodes.push(table);
+                } else {
+                    nodes.pop();
+                }
+
+                nodes.push(new Node('h2', { _: commentAccumulator, onclick: 'toggle(event)' }));
+                table = new Node('table');
+                commentAccumulator = '';
+            }
+        }
+
+        if (instructionNode) {
+            let tr = new Node('tr');
+            let td: Node;
+            let customNode = new Node('input', {
+                type: 'text',
+                name: instructionNode.data.name,
+                placeholder: 'custom value',
+                title: 'This raw value will override the normal one in the file'
+            });
+
+            if (Configurator.oldConfig) {
+                td = new Node('td', {
+                    _: Configurator.oldConfig[instructionNode.data.name] === undefined
+                        ? 'NEW'
+                        : '',
+                    class: 'new-item'
+                });
+                tr.children.push(td);
+            }
+
+            if (customValue) {
+                customNode.data.value = customValue;
+            }
+
+            td = new Node('td');
+            td.children.push(new Node('p', instructionNode.data.name));
+            tr.children.push(td);
+
+            td = new Node('td');
+            td.children.push(instructionNode);
+            tr.children.push(td);
+
+            td = new Node('td');
+            td.children.push(customNode);
+            tr.children.push(td);
+
+            tr.children.push(new Node('td', commentAccumulator));
+            table.children.push(tr);
+            commentAccumulator = '';
+            instructionNode = null;
+        }
+
         let comment = line.match(/^#\s*(.*)/);
-        let instruction = line.match(/^(\w+)\s*=\s*(\S+)\s*#\s*(.*)/);
+        let instruction = line.match(/^(\w+)\s*=\s*(\S+)(?:\s*#\s*(.*))?/);
 
         if (comment) {
             commentAccumulator += os.EOL + comment[1];
         } else if (instruction) {
             instructionNode = new Node('input', {
-                type: typesMap[instruction[3]] && typesMap[instruction[3]][0],
+                type: typesMap.get(instruction[3]) && typesMap.get(instruction[3])[0],
                 name: instruction[1],
                 placeholder: instruction[3]
             });
@@ -205,7 +206,7 @@ function parseConfig(config: string) {
                 if (instruction[2] === 'true') {
                     instructionNode.data.checked = null;
                 }
-            } else if (instructionNode.data.type && instruction[2].match(typesMap[instruction[3]][1])) {
+            } else if (instructionNode.data.type && instruction[2].match(typesMap.get(instruction[3])[1])) {
                 instructionNode.data.value = instruction[2].replace(/^"(.*)"$/, '$1');
             }
 
@@ -229,13 +230,17 @@ function parseConfig(config: string) {
                 } else {
                     instructionNode.data.type = 'text';
                 }
-            } else if (instruction[2].match(typesMap[instruction[3]][1])) {
+            } else if (instruction[2].match(typesMap.get(instruction[3])[1])) {
                 customValue = null;
             }
         }
     });
 
-    if (nodes[nodes.length - 1].tag !== 'table') {
+    if (table.children.length) {
+        nodes.push(table);
+    }
+
+    if (nodes.length && nodes[nodes.length - 1].tag !== 'table') {
         nodes.pop();
     }
 
