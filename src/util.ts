@@ -14,6 +14,7 @@ export const MODES = [
     'pde',
     'vala'
 ];
+export const UNCRUSTIFY_EXECUTABLE = vsc.workspace.getConfiguration('uncrustify').get('executablePath', 'uncrustify') || 'uncrustify';
 
 export function configPath() {
     let folder = vsc.window.activeTextEditor
