@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.8.6
+- Fixed wrong multiple choice selections being replaced by text areas (#25)
+
 #### 2.8.5
 - Fixed problems with uncrustify executable path (#23, #24)
 - Updated config parsing to support even barebone config files without any comment (#20)
