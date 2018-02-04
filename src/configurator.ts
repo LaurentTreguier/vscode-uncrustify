@@ -197,7 +197,7 @@ function parseConfig(config: string) {
             commentAccumulator += os.EOL + comment[1];
         } else if (instruction) {
             instructionNode = new Node('input', {
-                type: typesMap.get(instruction[3]) && typesMap.get(instruction[3])[0],
+                type: typesMap[instruction[3]] && typesMap[instruction[3]][0],
                 name: instruction[1],
                 placeholder: instruction[3]
             });
