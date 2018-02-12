@@ -34,6 +34,10 @@ export default class Configurator implements vsc.TextDocumentContentProvider {
 
                 let body = new Node('body');
                 let actions = new Node('div', { id: 'actions' });
+
+                let searchForm = new Node('form', { id: 'searchForm' });
+                let search = new Node('input', { id: 'search', type: 'text', placeholder: 'Search...' }, true);
+
                 let save = new Node('h3', { _: 'SAVE', onclick: `action('save')` });
                 let savePreset = new Node('h3', { _: 'SAVE PRESET', onclick: `action('savePreset')` });
                 let upgrade = new Node('h3', { _: 'UPGRADE CONFIG', onclick: `action('upgrade')` });
@@ -44,7 +48,8 @@ export default class Configurator implements vsc.TextDocumentContentProvider {
                 html.children.push(head, body);
                 head.children.push(style);
                 body.children.push(actions, form, a, script);
-                actions.children.push(save, savePreset);
+                actions.children.push(searchForm, save, savePreset);
+                searchForm.children.push(search);
                 form.children = parseConfig(result.config);
 
                 if (!result.rightVersion) {
