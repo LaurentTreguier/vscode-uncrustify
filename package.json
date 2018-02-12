@@ -139,10 +139,10 @@
     },
     "devDependencies": {
         "@types/fs-extra": "^5.0.0",
-        "@types/node": "^9.4.0",
+        "@types/node": "^9.4.5",
         "@types/request": "^2.47.0",
         "typescript": "^2.7.1",
-        "vsce": "^1.36.1",
+        "vsce": "^1.36.2",
         "vscode": "^1.1.10"
     }
 }

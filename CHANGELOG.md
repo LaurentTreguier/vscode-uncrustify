@@ -1,5 +1,8 @@
 # Changelog
 
+### 2.9.0
+- Added a search widget to look for specific settings in the graphical config (#19)
+
 #### 2.8.6
 - Fixed wrong multiple choice selections being replaced by text areas (#25)
 
