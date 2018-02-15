@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.9.2
+- Fixed environment variable not expanding after the first one
+
 #### 2.9.1
 - Fixed wrong behavior when using environment variables in config path (#26)
 
