@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.9.1
+- Fixed wrong behavior when using environment variables in config path (#26)
+
 ### 2.9.0
 - Added a search widget to look for specific settings in the graphical config (#19)
 
