@@ -38,13 +38,6 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
             logger.dbg('config file: ' + configPath);
 
             try {
-                if (configPath) {
-                    configPath = configPath.replace(/(%\w+%)|(\$\w+)/, (variable) => {
-                        let end = variable.startsWith('%') ? 2 : 1;
-                        return process.env[variable.substr(1, variable.length - end)];
-                    });
-                }
-
                 fs.accessSync(configPath);
             } catch (err) {
                 logger.dbg('error accessing config file: ' + err);

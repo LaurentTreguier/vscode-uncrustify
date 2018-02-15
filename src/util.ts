@@ -22,6 +22,11 @@ export function configPath() {
     let p = vsc.workspace.getConfiguration('uncrustify')
         .get<string>('configPath') || path.join(folder.uri.fsPath, CONFIG_FILE_NAME);
 
+    p = p.replace(/(%\w+%)|(\$\w+)/, (variable) => {
+        let end = variable.startsWith('%') ? 2 : 1;
+        return process.env[variable.substr(1, variable.length - end)];
+    });
+
     if (!path.isAbsolute(p)) {
         p = path.join(folder.uri.fsPath, p);
     }
