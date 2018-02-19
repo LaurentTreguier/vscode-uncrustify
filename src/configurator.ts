@@ -99,15 +99,18 @@ class Node {
     }
 }
 
+function extractVersion(line: string) {
+    let match = line.match(/\buncrustify(?:\s+|-)(\S+)/i);
+    return match ? match[1] : '0';
+}
+
 function checkVersion(config: string) {
     let version: string = null;
     let output = '';
 
     for (let line of config.split(/\r?\n/)) {
-        let match = line.match(/^#\s*uncrustify(?:\s+|-)(\S+)/i);
-
-        if (match) {
-            version = match[1];
+        if (line.match(/^#\s*uncrustify/i)) {
+            version = extractVersion(line);
             break;
         } else if (line.length === 0) {
             break;
@@ -121,7 +124,7 @@ function checkVersion(config: string) {
     return new Promise((resolve) => cp.spawn(util.executablePath(), ['--version'])
         .stdout
         .on('data', (data) => output += data.toString())
-        .on('close', () => resolve(output.match(/[\d.]+/)[0])))
+        .on('close', () => resolve(extractVersion(output))))
         .then((ver) => ver === version);
 }
 
