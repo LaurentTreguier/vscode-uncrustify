@@ -31,6 +31,12 @@ function action(which) {
         }
     }
 
+    for (var changed of document.getElementsByClassName('changed')) {
+        changed.classList.remove('changed');
+        changed.setAttribute('data-initial-value', changed.value);
+        changed.title = 'Current saved value: ' + changed.value;
+    }
+
     var a = document.getElementById('a');
     a.href = encodeURI(`command:uncrustify.${which}?` + JSON.stringify(config));
     a.click();
@@ -39,6 +45,18 @@ function action(which) {
 function toggle(event) {
     var table = tables[Array.from(titles).indexOf(event.srcElement)];
     table.style.display = table.style.display !== 'initial' ? 'initial' : 'none';
+}
+
+function inputChanged(input) {
+    var changed = input.type === 'checkbox'
+        ? ((input.checked ? 'true' : 'false') !== input.getAttribute('data-initial-value'))
+        : (input.value != input.getAttribute('data-initial-value'));
+
+    if (changed) {
+        input.classList.add('changed');
+    } else {
+        input.classList.remove('changed');
+    }
 }
 
 if (tables.length === 1) {

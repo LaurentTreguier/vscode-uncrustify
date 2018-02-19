@@ -89,7 +89,7 @@ class Node {
             for (let key in this._data) {
                 props += ' ' + key;
 
-                if (this._data[key] !== null) {
+                if (this._data[key] !== null && this._data[key] !== undefined) {
                     props += `="${this._data[key]}"`;
                 }
             }
@@ -241,6 +241,10 @@ function parseConfig(config: string) {
             } else if (instruction[2].match(typesMap.get(instruction[3])[1])) {
                 customValue = null;
             }
+
+            instructionNode.data['data-initial-value'] = instructionNode.data.value !== undefined ? instructionNode.data.value : instruction[2];
+            instructionNode.data.onchange = 'inputChanged(this)';
+            instructionNode.data.title = 'Current saved value: ' + instructionNode.data['data-initial-value'];
         }
     });
 

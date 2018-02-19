@@ -12,6 +12,10 @@
     transition: all 0.3s ease 0s;
 }
 
+.changed {
+    box-shadow: 0 0 0.5em 0.25em #ff7f00;
+}
+
 .new-item {
     padding-right: 1em;
     color: #0f0;
