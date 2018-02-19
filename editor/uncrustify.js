@@ -1,5 +1,6 @@
 var titles = document.getElementsByTagName('h2');
 var tables = document.getElementsByTagName('table');
+var actions = document.getElementById('actions');
 var searchForm = document.getElementById('searchForm');
 
 function action(which) {
@@ -44,8 +45,13 @@ if (tables.length === 1) {
     tables[0].style.display = '';
 }
 
+actions.style.opacity = 1;
+setTimeout(function () {
+    actions.style.opacity = '';
+}, 1500);
+
 searchForm.addEventListener('submit', function (event) {
-    var search = document.getElementById('search').value;
+    var searchWords = search.value;
 
     for (var table of tables) {
         var trs = table.getElementsByTagName('tr');
@@ -56,7 +62,7 @@ searchForm.addEventListener('submit', function (event) {
                 return tr.children[0].children[0].textContent.match(new RegExp(word, 'i'));
             }
 
-            if (search.split(/\s/g).some(searchMatcher)) {
+            if (searchWords.split(/\s/g).some(searchMatcher)) {
                 tr.style.display = '';
             } else {
                 tr.style.display = 'none';
