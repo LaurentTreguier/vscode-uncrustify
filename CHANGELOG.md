@@ -1,5 +1,10 @@
 # Changelog
 
+### 2.10.0
+- Fixed uncrustify executable version not being parsed correctly (#27)
+- The action buttons now fade away until the mouse hovers over them so that they don't hide any text (#28)
+- Any config option that has been changed and is not yet saved will have a shadow to easily spot them (#29)
+
 #### 2.9.2
 - Fixed environment variable not expanding after the first one
 

@@ -141,8 +141,8 @@
         "@types/fs-extra": "^5.0.0",
         "@types/node": "^9.4.6",
         "@types/request": "^2.47.0",
-        "typescript": "^2.7.1",
-        "vsce": "^1.36.2",
+        "typescript": "^2.7.2",
+        "vsce": "^1.36.3",
         "vscode": "^1.1.10"
     }
 }
