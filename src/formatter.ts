@@ -6,12 +6,13 @@ import * as logger from './logger';
 import * as util from './util';
 
 export default class Formatter implements vsc.DocumentFormattingEditProvider,
-    vsc.DocumentRangeFormattingEditProvider {
+    vsc.DocumentRangeFormattingEditProvider,
+    vsc.OnTypeFormattingEditProvider {
     public provideDocumentFormattingEdits(
         document: vsc.TextDocument,
         options: vsc.FormattingOptions,
         token: vsc.CancellationToken
-    ): Thenable<vsc.TextEdit[]> {
+    ) {
         return this.format(document, null, options, token);
     }
 
@@ -20,8 +21,17 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
         range: vsc.Range,
         options: vsc.FormattingOptions,
         token: vsc.CancellationToken
-    ): Thenable<vsc.TextEdit[]> {
+    ) {
         return this.format(document, range, options, token);
+    }
+
+    public provideOnTypeFormattingEdits(document: vsc.TextDocument,
+        position: vsc.Position,
+        ch: string,
+        options: vsc.FormattingOptions,
+        token: vsc.CancellationToken
+    ) {
+        return this.format(document, new vsc.Range(new vsc.Position(0, 0), position), options, token);
     }
 
     private format(

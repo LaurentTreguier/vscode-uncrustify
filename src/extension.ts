@@ -82,6 +82,7 @@ export function activate(context: vsc.ExtensionContext) {
     let formatter = new Formatter();
     context.subscriptions.push(vsc.languages.registerDocumentFormattingEditProvider(util.MODES, formatter));
     context.subscriptions.push(vsc.languages.registerDocumentRangeFormattingEditProvider(util.MODES, formatter));
+    context.subscriptions.push(vsc.languages.registerOnTypeFormattingEditProvider(util.MODES, formatter, ';', '}'));
     logger.dbg('registered formatter');
 
     let configurationSub = vsc.workspace.registerTextDocumentContentProvider('uncrustify', new Configurator());
