@@ -1,5 +1,8 @@
 # Changelog
 
+### 2.11.0
+- `editor.formatOnType` is now respected (#30)
+
 ### 2.10.0
 - Fixed uncrustify executable version not being parsed correctly (#27)
 - The action buttons now fade away until the mouse hovers over them so that they don't hide any text (#28)
