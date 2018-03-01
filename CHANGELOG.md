@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.11.1
+- Fixed error when the config file didn't have comments
+
 ### 2.11.0
 - `editor.formatOnType` is now respected (#30)
 
