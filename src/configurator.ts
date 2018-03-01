@@ -204,31 +204,35 @@ function parseConfig(config: string) {
         if (comment) {
             commentAccumulator += os.EOL + comment[1];
         } else if (instruction) {
+            let instName = instruction[1];
+            let instValue = instruction[2];
+            let instComment = instruction[3];
+
             instructionNode = new Node('input', {
-                type: typesMap[instruction[3]] && typesMap[instruction[3]][0],
-                name: instruction[1],
-                placeholder: instruction[3]
+                type: typesMap[instComment] && typesMap[instComment][0],
+                name: instName,
+                placeholder: instComment
             });
 
             if (instructionNode.data.type === 'checkbox') {
-                if (instruction[2] === 'true') {
+                if (instValue === 'true') {
                     instructionNode.data.checked = null;
                 }
-            } else if (instructionNode.data.type && instruction[2].match(typesMap.get(instruction[3])[1])) {
-                instructionNode.data.value = instruction[2].replace(/^"(.*)"$/, '$1');
+            } else if (instructionNode.data.type && instValue.match(typesMap.get(instComment)[1])) {
+                instructionNode.data.value = instValue.replace(/^"(.*)"$/, '$1');
             }
 
-            customValue = instruction[2];
+            customValue = instValue;
 
             if (!instructionNode.data.type) {
-                let answers = instruction[3].split('/');
+                let answers = instComment ? instComment.split('/') : [];
 
                 if (answers.length > 1) {
-                    instructionNode = new Node('select', { name: instruction[1] });
+                    instructionNode = new Node('select', { name: instName });
                     answers.forEach((answer) => {
                         let data: any = { _: answer, value: answer };
 
-                        if (answer === instruction[2]) {
+                        if (answer === instValue) {
                             data.selected = null;
                             customValue = null;
                         }
@@ -238,7 +242,7 @@ function parseConfig(config: string) {
                 } else {
                     instructionNode.data.type = 'text';
                 }
-            } else if (instruction[2].match(typesMap.get(instruction[3])[1])) {
+            } else if (instValue.match(typesMap.get(instruction[3])[1])) {
                 customValue = null;
             }
 
