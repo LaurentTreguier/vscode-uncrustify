@@ -86,6 +86,14 @@
                     "default": false,
                     "description": "Activates logs for debugging the extension",
                     "scope": "window"
+                },
+                "uncrustify.langOverrides": {
+                    "type": "object",
+                    "default": {
+                        "apex": "JAVA"
+                    },
+                    "description": "Overrides default language settings for uncrustify. Can be used to support languages not officially supported",
+                    "scope": "window"
                 }
             }
         },
