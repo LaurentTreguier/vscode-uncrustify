@@ -49,8 +49,9 @@ Uncrustify's default config file keeps its version at the top of the file; if th
 
 * `uncrustify.executablePath` (`string`): Path to the uncrustify executable if it's not already in the PATH environment variable.
 * `uncrustify.configPath` (`string`): Path to the uncrustify configuration file. Environment variables can be used with either a Windows or a bash syntax (examples: `%SOME_PATH%/dev/uncrustify.cfg`, `$SOME_PATH/dev/uncrustify.cfg`). A relative path will be automatically prefixed with the current workspace path.
-* `uncrustify.graphicalConfig (`boolean`): Toggles the graphical config editor when opening an uncrustify config file.
+* `uncrustify.graphicalConfig` (`boolean`): Toggles the graphical config editor when opening an uncrustify config file.
 * `uncrustify.debug` (`boolean`): Activates logs for debugging the extension. Logs should appear in the uncrustify output channel.
+* `uncrustify.langOverrides` (`object`): Overrides the language used by uncrustify.
 
 ## Changelog
 

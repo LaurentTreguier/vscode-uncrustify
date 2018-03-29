@@ -1,5 +1,8 @@
 # Changelog
 
+### 2.12.0
+- Added ability to override language mappings (#33)
+
 #### 2.11.1
 - Fixed error when the config file didn't have comments
 
