@@ -97,19 +97,19 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
     }
 };
 
-const langOverrides = vsc.workspace.getConfiguration("uncrustify").get("langOverrides");
+const langOverrides = vsc.workspace.getConfiguration('uncrustify').get('langOverrides');
 
 const languageMap = Object.assign(
     {
-        c: "C",
-        cpp: "CPP",
-        csharp: "CS",
-        d: "D",
-        java: "JAVA",
-        "objective-c": "OC",
-        pawn: "PAWN",
-        pde: "JAVA",
-        vala: "VALA"
+        c: 'C',
+        cpp: 'CPP',
+        csharp: 'CS',
+        d: 'D',
+        java: 'JAVA',
+        'objective-c': 'OC',
+        pawn: 'PAWN',
+        pde: 'JAVA',
+        vala: 'VALA'
     },
     langOverrides
 );
