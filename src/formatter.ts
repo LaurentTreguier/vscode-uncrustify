@@ -97,7 +97,7 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
     }
 };
 
-const langOverrides = vsc.workspace.getConfiguration("uncrustify").get("langOverrides", false);
+const langOverrides = vsc.workspace.getConfiguration("uncrustify").get("langOverrides");
 
 const languageMap = Object.assign(
   {
