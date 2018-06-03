@@ -141,16 +141,16 @@
         "postinstall": "node ./node_modules/vscode/bin/install"
     },
     "dependencies": {
-        "fs-extra": "^5.0.0",
-        "meta-pkg": "^0.7.2",
-        "request": "^2.85.0"
+        "fs-extra": "^6.0.1",
+        "meta-pkg": "^0.7.3",
+        "request": "^2.87.0"
     },
     "devDependencies": {
-        "@types/fs-extra": "^5.0.1",
-        "@types/node": "^9.6.1",
+        "@types/fs-extra": "^5.0.2",
+        "@types/node": "^7.x.x",
         "@types/request": "^2.47.0",
-        "typescript": "^2.8.1",
-        "vsce": "^1.37.6",
-        "vscode": "^1.1.14"
+        "typescript": "^2.9.1",
+        "vsce": "^1.41.1",
+        "vscode": "^1.1.18"
     }
 }
