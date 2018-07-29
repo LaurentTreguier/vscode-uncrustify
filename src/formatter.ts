@@ -64,6 +64,13 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
                 args.push('--frag');
             }
 
+            // This option help you if the document saved as UTF8 with BOM, though not able to format it partially.
+            if (util.useReplaceOption()) {
+                args.push('--replace');
+                args.push('--no-backup');
+                args.push(document.fileName);
+            }
+
             let uncrustify = cp.spawn(util.executablePath(), args);
 
             logger.dbg(`launched: ${util.executablePath()} ${args.join(' ')}`);
@@ -91,8 +98,10 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
             uncrustify.stderr.on('data', (data) => error += data);
             uncrustify.stderr.on('close', () => logger.dbg('uncrustify exited with error: ' + error));
 
-            uncrustify.stdin.write((document.getText(range)));
-            uncrustify.stdin.end();
+            if (!util.useReplaceOption()) {
+                uncrustify.stdin.write((document.getText(range)));
+                uncrustify.stdin.end();
+            }
         });
     }
 };
