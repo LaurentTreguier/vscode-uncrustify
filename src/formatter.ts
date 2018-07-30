@@ -77,7 +77,7 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
                 }
             });
 
-            uncrustify.stdout.on('data', (data) => output += data);
+            uncrustify.stdout.on('data', (data) => output += data.toString());
             uncrustify.stdout.on('close', () => {
                 if (output.length) {
                     let lastLine = document.lineCount - 1;
@@ -88,10 +88,10 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
                 }
             });
 
-            uncrustify.stderr.on('data', (data) => error += data);
+            uncrustify.stderr.on('data', (data) => error += data.toString());
             uncrustify.stderr.on('close', () => logger.dbg('uncrustify exited with error: ' + error));
 
-            uncrustify.stdin.write((document.getText(range)));
+            uncrustify.stdin.write(document.getText(range));
             uncrustify.stdin.end();
         });
     }
