@@ -94,6 +94,12 @@
                     },
                     "description": "Overrides default language settings for uncrustify. Can be used to support languages not officially supported",
                     "scope": "window"
+                },
+                "uncrustify.useReplaceOption": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Use the --replace option from uncrustify to bypass VSCode's document handling",
+                    "scope": "resource"
                 }
             }
         },

@@ -41,3 +41,7 @@ export function executablePath() {
 export function configUri() {
     return vsc.Uri.parse('uncrustify://configuration');
 };
+
+export function useReplaceOption() {
+    return vsc.workspace.getConfiguration('uncrustify').get('useReplaceOption');
+}

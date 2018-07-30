@@ -40,7 +40,9 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
         options: vsc.FormattingOptions,
         token: vsc.CancellationToken
     ): Thenable<vsc.TextEdit[]> {
-        return new Promise((resolve, reject) => {
+        let savePromise = util.useReplaceOption() ? document.save() : Promise.resolve(false);
+
+        return savePromise.then(() => new Promise((resolve, reject) => {
             token.onCancellationRequested(reject);
 
             let configPath = util.configPath();
@@ -62,6 +64,13 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
 
             if (range) {
                 args.push('--frag');
+            }
+
+            // This option help you if the document saved as UTF8 with BOM, though not able to format it partially.
+            if (util.useReplaceOption()) {
+                args.push('--replace');
+                args.push('--no-backup');
+                args.push(document.fileName);
             }
 
             let uncrustify = cp.spawn(util.executablePath(), args);
@@ -91,9 +100,11 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
             uncrustify.stderr.on('data', (data) => error += data.toString());
             uncrustify.stderr.on('close', () => logger.dbg('uncrustify exited with error: ' + error));
 
-            uncrustify.stdin.write(document.getText(range));
-            uncrustify.stdin.end();
-        });
+            if (!util.useReplaceOption()) {
+                uncrustify.stdin.write(document.getText(range));
+                uncrustify.stdin.end();
+            }
+        }));
     }
 };
 
