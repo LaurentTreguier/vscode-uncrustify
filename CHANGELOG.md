@@ -1,5 +1,8 @@
 # Changelog
 
+### 2.13.0
+- Added option to use the `--replace` uncrustify flag to format files in-place, bypassing VSCode (#36)
+
 ### 2.12.0
 - Added ability to override language mappings (#33)
 

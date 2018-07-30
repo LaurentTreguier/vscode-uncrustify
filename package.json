@@ -22,7 +22,6 @@
         "vscode": "^1.16.0"
     },
     "categories": [
-        "Languages",
         "Formatters"
     ],
     "keywords": [
@@ -147,16 +146,16 @@
         "postinstall": "node ./node_modules/vscode/bin/install"
     },
     "dependencies": {
-        "fs-extra": "^6.0.1",
+        "fs-extra": "^7.0.0",
         "meta-pkg": "^0.7.3",
         "request": "^2.87.0"
     },
     "devDependencies": {
-        "@types/fs-extra": "^5.0.2",
+        "@types/fs-extra": "^5.0.4",
         "@types/node": "^7.x.x",
-        "@types/request": "^2.47.0",
-        "typescript": "^2.9.1",
-        "vsce": "^1.41.1",
+        "@types/request": "^2.47.1",
+        "typescript": "^3.0.1",
+        "vsce": "^1.44.0",
         "vscode": "^1.1.18"
     }
 }
