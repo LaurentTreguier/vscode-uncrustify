@@ -148,14 +148,14 @@
     "dependencies": {
         "fs-extra": "^7.0.0",
         "meta-pkg": "^0.7.3",
-        "request": "^2.87.0"
+        "request": "^2.88.0"
     },
     "devDependencies": {
         "@types/fs-extra": "^5.0.4",
-        "@types/node": "^7.x.x",
+        "@types/node": "^8.x.x",
         "@types/request": "^2.47.1",
-        "typescript": "^3.0.1",
-        "vsce": "^1.44.0",
-        "vscode": "^1.1.18"
+        "typescript": "^3.0.3",
+        "vsce": "^1.49.2",
+        "vscode": "^1.1.21"
     }
 }
