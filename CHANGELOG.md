@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.13.2
+- Updated Windows archive URL to fetch x64 binaries as x86 ones are not produced with the latest Uncrustify
+
 #### 2.13.1
 - Updated dependencies to fix potential security issues
 
