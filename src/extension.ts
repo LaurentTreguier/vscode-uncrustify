@@ -26,10 +26,10 @@ export function activate(context: vsc.ExtensionContext) {
             brew: 'uncrustify',
             fallback: {
                 win32: {
-                    source: 'http://downloads.sourceforge.net/project/uncrustify/uncrustify/uncrustify-%VERSION%/uncrustify-%VERSION%-win32.zip',
+                    source: 'http://downloads.sourceforge.net/project/uncrustify/uncrustify/uncrustify-%VERSION%/uncrustify-%VERSION%-win64.zip',
                     version: {
                         feed: 'https://sourceforge.net/projects/uncrustify/rss?path=/',
-                        regexp: /uncrustify\/uncrustify-([\d.]+)\/uncrustify-\1-win32\.zip/
+                        regexp: /uncrustify\/uncrustify-([\d.]+)\/uncrustify-\1-win64\.zip/
                     },
                     bin: '.'
                 }
