@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.13.3
+- Fixed typos in commands display names (#39)
+
 #### 2.13.2
 - Updated Windows archive URL to fetch x64 binaries as x86 ones are not produced with the latest Uncrustify
 
