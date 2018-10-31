@@ -110,17 +110,17 @@
             },
             {
                 "title": "Open config file",
-                "category": "Uncustify",
+                "category": "Uncrustify",
                 "command": "uncrustify.open"
             },
             {
                 "title": "Save config file",
-                "category": "Uncustify",
+                "category": "Uncrustify",
                 "command": "uncrustify.save"
             },
             {
                 "title": "Save config file as preset",
-                "category": "Uncustify",
+                "category": "Uncrustify",
                 "command": "uncrustify.savePreset"
             },
             {
