@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.13.4
+- Updated dependencies to fix potential security issues
+
 #### 2.13.3
 - Fixed typos in commands display names (#39)
 
