@@ -155,7 +155,7 @@
         "@types/node": "^8.10.38",
         "@types/request": "^2.48.1",
         "typescript": "^3.1.6",
-        "vsce": "^1.53.0",
+        "vsce": "^1.53.2",
         "vscode": "^1.1.22"
     }
 }

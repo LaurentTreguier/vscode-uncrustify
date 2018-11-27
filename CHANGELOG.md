@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.13.5
+- Updated dependencies
+
 #### 2.13.4
 - Updated dependencies to fix potential security issues
 
