@@ -18,46 +18,40 @@ const typesMap = {
 export default class Configurator implements vsc.TextDocumentContentProvider {
     static oldConfig: any;
 
-    provideTextDocumentContent(uri: vsc.Uri, token: vsc.CancellationToken) {
-        return new Promise<string>((resolve) =>
-            fs.readFile(util.configPath(), (err, data) => resolve(data.toString())))
-            .then((config) => checkVersion(config)
-                .then((rightVersion) => ({ config: config, rightVersion: rightVersion })))
-            .then((result) => {
-                logger.dbg('generating HTML');
+    async provideTextDocumentContent(uri: vsc.Uri, token: vsc.CancellationToken) {
+        const config = await new Promise<string>(resolve => fs.readFile(util.configPath(), (err, data) => resolve(data.toString())));
+        const rightVersion = await checkVersion(config);
+        const result = { config: config, rightVersion: rightVersion };
 
-                let resourcePath = path.join(ext.extContext.extensionPath, 'editor');
-                let html = new Node('html');
+        logger.dbg('generating HTML');
 
-                let head = new Node('head');
-                let style = new Node('link', { rel: 'stylesheet', href: vsc.Uri.file(path.join(resourcePath, 'uncrustify.css')) }, true);
+        let resourcePath = path.join(ext.extContext.extensionPath, 'editor');
+        let html = new Node('html');
+        let head = new Node('head');
+        let style = new Node('link', { rel: 'stylesheet', href: vsc.Uri.file(path.join(resourcePath, 'uncrustify.css')) }, true);
+        let body = new Node('body');
+        let actions = new Node('div', { id: 'actions' });
+        let searchForm = new Node('form', { id: 'searchForm' });
+        let search = new Node('input', { id: 'search', type: 'text', placeholder: 'Search...' }, true);
+        let save = new Node('h3', { _: 'SAVE', onclick: `action('save')` });
+        let savePreset = new Node('h3', { _: 'SAVE PRESET', onclick: `action('savePreset')` });
+        let upgrade = new Node('h3', { _: 'UPGRADE CONFIG', onclick: `action('upgrade')` });
+        let form = new Node('form');
+        let a = new Node('a', { id: 'a', display: 'none' });
+        let script = new Node('script', { src: vsc.Uri.file(path.join(resourcePath, 'uncrustify.js')) });
 
-                let body = new Node('body');
-                let actions = new Node('div', { id: 'actions' });
+        html.children.push(head, body);
+        head.children.push(style);
+        body.children.push(actions, form, a, script);
+        actions.children.push(searchForm, save, savePreset);
+        searchForm.children.push(search);
+        form.children = parseConfig(result.config);
 
-                let searchForm = new Node('form', { id: 'searchForm' });
-                let search = new Node('input', { id: 'search', type: 'text', placeholder: 'Search...' }, true);
+        if (!result.rightVersion) {
+            actions.children.push(upgrade);
+        }
 
-                let save = new Node('h3', { _: 'SAVE', onclick: `action('save')` });
-                let savePreset = new Node('h3', { _: 'SAVE PRESET', onclick: `action('savePreset')` });
-                let upgrade = new Node('h3', { _: 'UPGRADE CONFIG', onclick: `action('upgrade')` });
-                let form = new Node('form');
-                let a = new Node('a', { id: 'a', display: 'none' });
-                let script = new Node('script', { src: vsc.Uri.file(path.join(resourcePath, 'uncrustify.js')) });
-
-                html.children.push(head, body);
-                head.children.push(style);
-                body.children.push(actions, form, a, script);
-                actions.children.push(searchForm, save, savePreset);
-                searchForm.children.push(search);
-                form.children = parseConfig(result.config);
-
-                if (!result.rightVersion) {
-                    actions.children.push(upgrade);
-                }
-
-                return '<!DOCTYPE html>' + html.toString();
-            });
+        return '<!DOCTYPE html>' + html.toString();
     }
 }
 
@@ -95,7 +89,7 @@ class Node {
             }
         }
 
-        return `<${this._tag}${props}>${value}${this.children.map((n) => n.toString()).join('')}${this._autoclose ? '' : ('</' + this._tag + '>')}`;
+        return `<${this._tag}${props}>${value}${this.children.map(n => n.toString()).join('')}${this._autoclose ? '' : ('</' + this._tag + '>')}`;
     }
 }
 
@@ -104,7 +98,7 @@ function extractVersion(line: string) {
     return match ? match[1] : '0';
 }
 
-function checkVersion(config: string) {
+async function checkVersion(config: string) {
     let version: string = null;
     let output = '';
 
@@ -121,11 +115,11 @@ function checkVersion(config: string) {
         return Promise.resolve(false);
     }
 
-    return new Promise((resolve) => cp.spawn(util.executablePath(), ['--version'])
+    const ver = await new Promise(resolve => cp.spawn(util.executablePath(), ['--version'])
         .stdout
-        .on('data', (data) => output += data.toString())
-        .on('close', () => resolve(extractVersion(output))))
-        .then((ver) => ver === version);
+        .on('data', data => output += data.toString())
+        .on('close', () => resolve(extractVersion(output))));
+    return ver === version;
 }
 
 function parseConfig(config: string) {
@@ -137,7 +131,7 @@ function parseConfig(config: string) {
     let instructionNode: Node;
     let customValue: any;
 
-    config.split(/\r?\n/).forEach((line) => {
+    config.split(/\r?\n/).forEach(line => {
         if (line.length === 1) {
             return;
         }
@@ -229,7 +223,7 @@ function parseConfig(config: string) {
 
                 if (answers.length > 1) {
                     instructionNode = new Node('select', { name: instName });
-                    answers.forEach((answer) => {
+                    answers.forEach(answer => {
                         let data: any = { _: answer, value: answer };
 
                         if (answer === instValue) {

@@ -33,24 +33,25 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
         return this.format(document, new vsc.Range(new vsc.Position(0, 0), position), options, token);
     }
 
-    private format(
+    private async format(
         document: vsc.TextDocument,
         range: vsc.Range,
         options: vsc.FormattingOptions,
         token: vsc.CancellationToken
-    ): Thenable<vsc.TextEdit[]> {
-        let savePromise = util.useReplaceOption() ? document.save() : Promise.resolve(false);
+    ): Promise<vsc.TextEdit[]> {
+        if (util.useReplaceOption()) {
+            await document.save();
+        }
 
-        return savePromise.then(() => new Promise((resolve, reject) => {
+        return await new Promise((resolve, reject) => {
             token.onCancellationRequested(reject);
-
             let configPath = util.configPath();
-
             logger.dbg('config file: ' + configPath);
 
             try {
                 fs.accessSync(configPath);
-            } catch (err) {
+            }
+            catch (err) {
                 logger.dbg('error accessing config file: ' + err);
                 vsc.window.showErrorMessage('The uncrustify config file path is incorrect: ' + configPath);
                 reject(err);
@@ -65,7 +66,7 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
                 args.push('--frag');
             }
 
-            // This option help you if the document saved as UTF8 with BOM, though not able to format it partially.
+            // This option helps you if the document saved as UTF8 with BOM, though not able to format it partially.
             if (util.useReplaceOption()) {
                 args.push('--replace');
                 args.push('--no-backup');
@@ -73,37 +74,37 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
             }
 
             let uncrustify = cp.spawn(util.executablePath(), args);
-
             logger.dbg(`launched: ${util.executablePath()} ${args.join(' ')}`);
-            uncrustify.on('error', reject);
-            uncrustify.on('exit', (code) => {
-                logger.dbg('uncrustify exited with status: ' + code);
 
+            uncrustify.on('error', reject);
+            uncrustify.on('exit', code => {
+                logger.dbg('uncrustify exited with status: ' + code);
                 if (code < 0) {
                     vsc.window.showErrorMessage('Uncrustify exited with error code: ' + code);
                     reject(code);
                 }
             });
 
-            uncrustify.stdout.on('data', (data) => output += data.toString());
+            uncrustify.stdout.on('data', data => output += data.toString());
             uncrustify.stdout.on('close', () => {
                 if (output.length) {
                     let lastLine = document.lineCount - 1;
                     let lastCol = document.lineAt(lastLine).text.length;
                     resolve([new vsc.TextEdit(range || new vsc.Range(0, 0, lastLine, lastCol), output)]);
-                } else {
+                }
+                else {
                     reject();
                 }
             });
 
-            uncrustify.stderr.on('data', (data) => error += data.toString());
+            uncrustify.stderr.on('data', data => error += data.toString());
             uncrustify.stderr.on('close', () => logger.dbg('uncrustify exited with error: ' + error));
 
             if (!util.useReplaceOption()) {
                 uncrustify.stdin.write(document.getText(range));
                 uncrustify.stdin.end();
             }
-        }));
+        });
     }
 };
 

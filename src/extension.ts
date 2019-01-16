@@ -15,7 +15,7 @@ export function activate(context: vsc.ExtensionContext) {
 
     let message = 'Uncrustify does not seem to be installed';
     let choices: string[] = [];
-    let installerChoices = {};
+    let installerChoices = new Map<string, pkg.Installer>();
     let uncrustify: pkg.Package = {
         name: 'uncrustify',
         targets: ['uncrustify'],
@@ -36,41 +36,41 @@ export function activate(context: vsc.ExtensionContext) {
     };
 
     pkg.isInstalled(uncrustify)
-        .then((installed) => {
+        .then(installed => {
             logger.dbg('uncrustify installed: ' + installed);
             return installed
-                ? pkg.isUpgradable(uncrustify).then((upgradable) => {
+                ? pkg.isUpgradable(uncrustify).then(upgradable => {
                     message = 'Uncrustify can be upgraded';
                     return upgradable;
                 })
                 : Promise.resolve(!installed && vsc.workspace.getConfiguration('uncrustify').get<string>('executablePath') === null);
-        }).then((shouldInstall) => {
+        }).then(shouldInstall => {
             logger.dbg('should uncrustify be installed: ' + shouldInstall);
             return shouldInstall ? pkg.getInstallers(uncrustify) : null;
-        }).then((installers) => {
+        }).then(installers => {
             logger.dbg('installers found: ' + (installers
-                ? installers.map((i) => i.prettyName).join(', ')
+                ? installers.map(i => i.prettyName).join(', ')
                 : 'none'));
 
             if (installers && installers.length) {
-                installers.forEach((installer) => {
+                installers.forEach(installer => {
                     let choice = 'Install using ' + installer.prettyName;
                     choices.push(choice);
-                    installerChoices[choice] = installer;
+                    installerChoices.set(choice, installer);
                 });
 
                 return <PromiseLike<string>>vsc.window.showWarningMessage(message, ...choices).then((choice) => choice);
             }
-        }).then((choice) => {
+        }).then(async choice => {
             logger.dbg('installer choice: ' + choice);
 
             if (choice) {
                 logger.show();
-                return installerChoices[choice]
-                    .install((data) => logger.log(data, false))
-                    .then((alreadyInstalled) => !alreadyInstalled);
+                const alreadyInstalled = await installerChoices.get(choice)
+                    .install(data => logger.log(data, false));
+                return !alreadyInstalled;
             }
-        }).then((didIntall) => {
+        }).then(didIntall => {
             if (didIntall) {
                 logger.dbg('uncrustify installed');
                 vsc.window.showInformationMessage('Uncrustify installed successfully');
@@ -98,31 +98,31 @@ export function activate(context: vsc.ExtensionContext) {
 
         return fs.access(util.configPath(), fs.constants.F_OK)
             .then(() => vsc.window.showWarningMessage('Configuration file already exists', 'Overwrite')
-                .then((choice) => {
+                .then(choice => {
                     if (choice !== 'Overwrite') {
                         throw error;
                     }
                 })
-            ).catch((e) => {
+            ).catch(e => {
                 if (e === error) {
                     throw e;
                 } else {
                     return fs.ensureFile(util.configPath());
                 }
             })
-            .then(() => new Promise((resolve) =>
+            .then(() => new Promise(resolve =>
                 cp.spawn(util.executablePath(), ['-c', util.configPath(), '--update-config-with-doc'])
                     .stdout
-                    .on('data', (data) => output += data.toString())
+                    .on('data', data => output += data.toString())
                     .on('end', () => resolve(output.replace(/\?\?\?:.*/g, '')))
-            )).then((config) => fs.writeFile(util.configPath(), config))
-            .catch((reason) => logger.dbg(reason));
+            )).then(config => fs.writeFile(util.configPath(), config))
+            .catch(reason => logger.dbg(reason));
     });
 
     vsc.commands.registerCommand('uncrustify.open', () =>
         vsc.commands.executeCommand('vscode.open', vsc.Uri.file(util.configPath())));
 
-    vsc.commands.registerCommand('uncrustify.save', (config) => {
+    vsc.commands.registerCommand('uncrustify.save', async config => {
         logger.dbg('command: save');
 
         if (!config) {
@@ -130,32 +130,35 @@ export function activate(context: vsc.ExtensionContext) {
             return;
         }
 
-        return new Promise((resolve, reject) => fs.readFile(util.configPath(), (err, data) => {
-            if (err) {
-                reject(err);
-            }
+        try {
+            const data = await new Promise((resolve, reject) => fs.readFile(util.configPath(), (err, data) => {
+                if (err) {
+                    reject(err);
+                }
+                resolve(data);
+            }));
 
-            resolve(data);
-        })).then((data) => {
             let result = data.toString();
 
             for (let key in config) {
                 result = result.replace(new RegExp(`^(${key}\\s*=\\s*)\\S+(.*)`, 'm'), `$1${config[key]}$2`);
             }
 
-            return result;
-        }).then((result) => new Promise((resolve, reject) => fs.writeFile(util.configPath(), result, (err) => {
-            if (err) {
-                reject(err);
-            }
+            return await new Promise((resolve, reject) => fs.writeFile(util.configPath(), result, err => {
+                if (err) {
+                    reject(err);
+                }
 
-            resolve();
-
-            logger.dbg('saved config file');
-        }))).catch((reason) => logger.dbg('error saving config file: ' + reason));
+                resolve();
+                logger.dbg('saved config file');
+            }));
+        }
+        catch (reason) {
+            return logger.dbg('error saving config file: ' + reason);
+        }
     });
 
-    vsc.commands.registerCommand('uncrustify.savePreset', (config, name) => {
+    vsc.commands.registerCommand('uncrustify.savePreset', async (config, name) => {
         logger.dbg('command: savePreset');
 
         if (!config) {
@@ -167,22 +170,22 @@ export function activate(context: vsc.ExtensionContext) {
             ? Promise.resolve(name)
             : vsc.window.showInputBox({ placeHolder: 'Name of the preset' });
 
-        return promise.then((chosenName) => {
-            if (!chosenName && name === undefined) {
-                vsc.window.showErrorMessage('Name can\'t be empty !');
-                throw new Error('Name is empty');
-            }
+        const chosenName = await promise;
 
-            let presets = extContext.globalState.get('presets', {});
-            presets[chosenName] = config;
+        if (!chosenName && name === undefined) {
+            vsc.window.showErrorMessage('Name can\'t be empty !');
+            throw new Error('Name is empty');
+        }
 
-            logger.dbg('saved preset ' + chosenName);
+        let presets = extContext.globalState.get('presets', {});
+        presets[chosenName] = config;
+        logger.dbg('saved preset ' + chosenName);
 
-            return extContext.globalState.update('presets', presets)
-        }).then(() => (name === undefined) && vsc.window.showInformationMessage('Preset saved !'));
+        await extContext.globalState.update('presets', presets);
+        return await ((name === undefined) && vsc.window.showInformationMessage('Preset saved !'));
     });
 
-    presetCommand('loadPreset', (presets, name, internal) => {
+    presetCommand('loadPreset', async (presets, name, internal) => {
         logger.dbg('command: loadPreset');
 
         if (!presets || (!name && name !== '')) {
@@ -190,18 +193,16 @@ export function activate(context: vsc.ExtensionContext) {
             return;
         }
 
-        return vsc.commands.executeCommand('uncrustify.create')
-            .then(() => vsc.commands.executeCommand('uncrustify.save', presets[name]))
-            .then(() => {
-                Configurator.oldConfig = presets[name];
+        await vsc.commands.executeCommand('uncrustify.create');
+        await vsc.commands.executeCommand('uncrustify.save', presets[name]);
+        Configurator.oldConfig = presets[name];
 
-                if (!internal) {
-                    vsc.window.showInformationMessage('Preset loaded !');
-                }
-            });
+        if (!internal) {
+            vsc.window.showInformationMessage('Preset loaded !');
+        }
     });
 
-    presetCommand('deletePreset', (presets, name, internal) => {
+    presetCommand('deletePreset', async (presets, name, internal) => {
         logger.dbg('command: deletePreset');
 
         if (!presets || (!name && name !== '')) {
@@ -210,11 +211,11 @@ export function activate(context: vsc.ExtensionContext) {
         }
 
         delete presets[name];
-        return extContext.globalState.update('presets', presets)
-            .then(() => !internal && vsc.window.showInformationMessage('Preset deleted !'));
+        await extContext.globalState.update('presets', presets);
+        return await (!internal && vsc.window.showInformationMessage('Preset deleted !'));
     });
 
-    vsc.commands.registerCommand('uncrustify.upgrade', (config) => {
+    vsc.commands.registerCommand('uncrustify.upgrade', async config => {
         logger.dbg('command: upgrade');
 
         if (!config) {
@@ -222,10 +223,10 @@ export function activate(context: vsc.ExtensionContext) {
             return;
         }
 
-        return vsc.commands.executeCommand('uncrustify.savePreset', config, '')
-            .then(() => vsc.commands.executeCommand('uncrustify.loadPreset', ''))
-            .then(() => vsc.commands.executeCommand('uncrustify.deletePreset', ''))
-            .then(() => vsc.commands.executeCommand('vscode.open', vsc.Uri.file(util.configPath())));
+        await vsc.commands.executeCommand('uncrustify.savePreset', config, '');
+        await vsc.commands.executeCommand('uncrustify.loadPreset', '');
+        await vsc.commands.executeCommand('uncrustify.deletePreset', '');
+        return await vsc.commands.executeCommand('vscode.open', vsc.Uri.file(util.configPath()));
     });
 
     if (vsc.workspace.getConfiguration('uncrustify').get('graphicalConfig', true)) {
@@ -252,7 +253,7 @@ export function deactivate() { };
 export { extContext };
 
 function presetCommand(commandName: string, callback: (presets: any, name: string, internal: boolean) => any) {
-    vsc.commands.registerCommand('uncrustify.' + commandName, (name) => {
+    vsc.commands.registerCommand('uncrustify.' + commandName, async name => {
         logger.dbg('command: ' + commandName);
 
         let presets = extContext.globalState.get('presets', {});
@@ -271,12 +272,12 @@ function presetCommand(commandName: string, callback: (presets: any, name: strin
             ? Promise.resolve(name)
             : vsc.window.showQuickPick(names);
 
-        return promise.then((chosenName) => {
-            if (!chosenName && name === undefined) {
-                throw new Error('No preset selected');
-            }
+        const chosenName = await promise;
 
-            return callback(presets, chosenName, name !== undefined);
-        });
+        if (!chosenName && name === undefined) {
+            throw new Error('No preset selected');
+        }
+
+        return callback(presets, chosenName, name !== undefined);
     });
 }
