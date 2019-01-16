@@ -1,8 +1,6 @@
 import * as fs from 'fs-extra';
-import * as path from 'path';
 import * as cp from 'child_process';
 import * as vsc from 'vscode';
-import * as req from 'request';
 import * as pkg from 'meta-pkg';
 import * as logger from './logger';
 import * as util from './util';
