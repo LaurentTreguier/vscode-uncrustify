@@ -34,7 +34,7 @@ Starting with version 2.0.0, opening the configured config file (or a file named
 
 ![configuration image](https://raw.githubusercontent.com/LaurentTreguier/vscode-uncrustify/master/images/screenshot.png)
 
-The graphical editor can be disabled in the [extension seetings](#extension-settings).
+The graphical editor can be disabled in the [extension settings](#extension-settings).
 Uncrustify's default config file keeps its version at the top of the file; if that version differs from the version of the uncrustify executable then a button will be available to upgrade the config file to the newer version. New items will be marked as such when using the graphical editor.
 
 ![configuration upgrade image](https://raw.githubusercontent.com/LaurentTreguier/vscode-uncrustify/master/images/screenshot-upgrade.png)
