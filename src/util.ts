@@ -16,11 +16,18 @@ export const MODES = [
 ];
 
 export function configPath() {
-    let folder = vsc.window.activeTextEditor
-        ? vsc.workspace.getWorkspaceFolder(vsc.window.activeTextEditor.document.uri)
-        : vsc.workspace.workspaceFolders && vsc.workspace.workspaceFolders[0];
+    let folderPath = vsc.window.activeTextEditor
+        ? vsc.workspace.getWorkspaceFolder(vsc.window.activeTextEditor.document.uri).uri.fsPath
+        : (vsc.workspace.workspaceFolders && vsc.workspace.workspaceFolders.length > 0)
+            ? vsc.workspace.workspaceFolders[0].uri.fsPath
+            : vsc.workspace.rootPath;
+
+    if (!folderPath) {
+        return null;
+    }
+
     let p = vsc.workspace.getConfiguration('uncrustify')
-        .get<string>('configPath') || path.join(folder.uri.fsPath, CONFIG_FILE_NAME);
+        .get<string>('configPath') || path.join(folderPath, CONFIG_FILE_NAME);
 
     p = p.replace(/(%\w+%)|(\$\w+)/g, variable => {
         let end = variable.startsWith('%') ? 2 : 1;
@@ -28,7 +35,7 @@ export function configPath() {
     });
 
     if (!path.isAbsolute(p)) {
-        p = path.join(folder.uri.fsPath, p);
+        p = path.join(folderPath, p);
     }
 
     return p;
