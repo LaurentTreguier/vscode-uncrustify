@@ -19,7 +19,7 @@
         "url": "https://github.com/LaurentTreguier/vscode-uncrustify/issues"
     },
     "engines": {
-        "vscode": "^1.16.0"
+        "vscode": "^1.31.0"
     },
     "categories": [
         "Formatters"
@@ -147,13 +147,13 @@
     },
     "dependencies": {
         "fs-extra": "^7.0.1",
-        "meta-pkg": "^0.7.3"
+        "meta-pkg": "^0.7.5"
     },
     "devDependencies": {
         "@types/fs-extra": "^5.0.4",
-        "@types/node": "^8.10.39",
-        "typescript": "^3.2.2",
-        "vsce": "^1.54.0",
-        "vscode": "^1.1.26"
+        "@types/node": "^10.12.23",
+        "typescript": "^3.3.3",
+        "vsce": "^1.57.0",
+        "vscode": "^1.1.29"
     }
 }

@@ -1,5 +1,9 @@
 # Changelog
 
+#### 2.13.6
+- Fixed typo in README (#41)
+- Updated dependencies
+
 #### 2.13.5
 - Updated dependencies
 
