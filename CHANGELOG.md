@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.13.7
+- Fixed error when the bottom panel is visible (#42)
+
 #### 2.13.6
 - Fixed typo in README (#41)
 - Updated dependencies

@@ -150,8 +150,8 @@
         "meta-pkg": "^0.7.5"
     },
     "devDependencies": {
-        "@types/fs-extra": "^5.0.4",
-        "@types/node": "^10.12.23",
+        "@types/fs-extra": "^5.0.5",
+        "@types/node": "^10.12.26",
         "typescript": "^3.3.3",
         "vsce": "^1.57.0",
         "vscode": "^1.1.29"
