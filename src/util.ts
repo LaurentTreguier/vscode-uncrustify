@@ -16,11 +16,22 @@ export const MODES = [
 ];
 
 export function configPath() {
-    let folderPath = vsc.window.activeTextEditor
-        ? vsc.workspace.getWorkspaceFolder(vsc.window.activeTextEditor.document.uri).uri.fsPath
-        : (vsc.workspace.workspaceFolders && vsc.workspace.workspaceFolders.length > 0)
-            ? vsc.workspace.workspaceFolders[0].uri.fsPath
-            : vsc.workspace.rootPath;
+    let folderPath: string;
+    const textEditors = [vsc.window.activeTextEditor];
+    textEditors.push(...vsc.window.visibleTextEditors);
+
+    for (let textEditor of textEditors.filter(e => e)) {
+        let workspace: vsc.WorkspaceFolder;
+
+        if (workspace = vsc.workspace.getWorkspaceFolder(textEditor.document.uri)) {
+            folderPath = workspace.uri.fsPath;
+            break;
+        }
+    }
+
+    if (!folderPath && vsc.workspace.workspaceFolders.length > 0) {
+        folderPath = vsc.workspace.workspaceFolders[0].uri.fsPath;
+    }
 
     if (!folderPath) {
         return null;
