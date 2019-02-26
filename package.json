@@ -33,6 +33,7 @@
     ],
     "activationEvents": [
         "onLanguage:apex",
+        "onLanguage:apex-anon",
         "onLanguage:c",
         "onLanguage:cpp",
         "onLanguage:csharp",
@@ -89,7 +90,8 @@
                 "uncrustify.langOverrides": {
                     "type": "object",
                     "default": {
-                        "apex": "JAVA"
+                        "apex": "JAVA",
+                        "apex-anon": "JAVA"
                     },
                     "description": "Overrides default language settings for uncrustify. Can be used to support languages not officially supported",
                     "scope": "window"

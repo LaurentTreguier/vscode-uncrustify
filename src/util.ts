@@ -4,6 +4,7 @@ import * as vsc from 'vscode';
 export const CONFIG_FILE_NAME = 'uncrustify.cfg';
 export const MODES = [
     'apex',
+    'apex-anon',
     'c',
     'cpp',
     'csharp',
