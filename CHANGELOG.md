@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.14.0
+- Update dependencies (for real)
+
 ### 2.14.0
 - Added default Anonymous Apex => Java language mapping (#43)
 
