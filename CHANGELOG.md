@@ -1,5 +1,8 @@
 # Changelog
 
+### 2.14.0
+- Added default Anonymous Apex => Java language mapping (#43)
+
 #### 2.13.7
 - Fixed error when the bottom panel is visible (#42)
 
