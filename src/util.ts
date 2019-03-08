@@ -17,7 +17,7 @@ export const MODES = [
 ];
 
 export function configPath() {
-    let folderPath: string;
+    let folderUri: vsc.Uri;
     const textEditors = [vsc.window.activeTextEditor];
     textEditors.push(...vsc.window.visibleTextEditors);
 
@@ -25,21 +25,21 @@ export function configPath() {
         let workspace: vsc.WorkspaceFolder;
 
         if (workspace = vsc.workspace.getWorkspaceFolder(textEditor.document.uri)) {
-            folderPath = workspace.uri.fsPath;
+            folderUri = workspace.uri;
             break;
         }
     }
 
-    if (!folderPath && vsc.workspace.workspaceFolders.length > 0) {
-        folderPath = vsc.workspace.workspaceFolders[0].uri.fsPath;
+    if (!folderUri && vsc.workspace.workspaceFolders.length > 0) {
+        folderUri = vsc.workspace.workspaceFolders[0].uri;
     }
 
-    if (!folderPath) {
+    if (!folderUri) {
         return null;
     }
 
-    let p = vsc.workspace.getConfiguration('uncrustify')
-        .get<string>('configPath') || path.join(folderPath, CONFIG_FILE_NAME);
+    let p = vsc.workspace.getConfiguration('uncrustify', folderUri)
+        .get<string>('configPath') || path.join(folderUri.fsPath, CONFIG_FILE_NAME);
 
     p = p.replace(/(%\w+%)|(\$\w+)/g, variable => {
         let end = variable.startsWith('%') ? 2 : 1;
@@ -47,7 +47,7 @@ export function configPath() {
     });
 
     if (!path.isAbsolute(p)) {
-        p = path.join(folderPath, p);
+        p = path.join(folderUri.fsPath, p);
     }
 
     return p;
