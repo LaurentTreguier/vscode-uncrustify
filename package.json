@@ -153,7 +153,7 @@
     },
     "devDependencies": {
         "@types/fs-extra": "^5.0.5",
-        "@types/node": "^10.12.27",
+        "@types/node": "^10.12.30",
         "typescript": "^3.3.3333",
         "vsce": "^1.57.1",
         "vscode": "^1.1.30"

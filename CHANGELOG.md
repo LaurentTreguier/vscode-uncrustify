@@ -1,6 +1,9 @@
 # Changelog
 
-#### 2.14.0
+#### 2.14.2
+- Switched from deprecated `vscode.previewHtml` command to the WebView API (#44)
+
+#### 2.14.1
 - Update dependencies (for real)
 
 ### 2.14.0
