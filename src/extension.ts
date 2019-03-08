@@ -83,7 +83,8 @@ export function activate(context: vsc.ExtensionContext) {
     context.subscriptions.push(vsc.languages.registerOnTypeFormattingEditProvider(util.MODES, formatter, ';', '}'));
     logger.dbg('registered formatter');
 
-    let configurationSub = vsc.workspace.registerTextDocumentContentProvider('uncrustify', new Configurator());
+    let configurator = new Configurator();
+    let configurationSub = vsc.workspace.registerTextDocumentContentProvider('uncrustify', configurator);
     context.subscriptions.push(configurationSub);
 
     vsc.commands.registerCommand('uncrustify.create', () => {
@@ -235,8 +236,16 @@ export function activate(context: vsc.ExtensionContext) {
                 logger.dbg('launching graphical editor');
 
                 vsc.commands.executeCommand('workbench.action.closeActiveEditor')
-                    .then(() => vsc.commands.executeCommand('vscode.previewHtml',
-                        util.configUri(), undefined, 'Uncrustify configuration'));
+                    .then(async () => {
+                        let webviewPanel = vsc.window.createWebviewPanel(
+                            'uncrustifyConfiguration',
+                            'Uncrustify configuration',
+                            vsc.ViewColumn.Active,
+                            { enableCommandUris: true, enableScripts: true }
+                        );
+
+                        webviewPanel.webview.html = await configurator.provideTextDocumentContent(util.configUri(), null);
+                    });
             }
         }
 
