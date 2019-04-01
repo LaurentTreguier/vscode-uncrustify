@@ -52,7 +52,7 @@
         "onCommand:uncrustify.deletePreset",
         "onCommand:uncrustify.upgrade"
     ],
-    "main": "./out/src/extension",
+    "main": "./out/extension",
     "contributes": {
         "configuration": {
             "title": "Uncrustify configuration",
@@ -143,8 +143,9 @@
         ]
     },
     "scripts": {
-        "vscode:prepublish": "tsc -p ./",
-        "compile": "tsc -watch -p ./",
+        "vscode:prepublish": "webpack --mode production",
+        "compile": "webpack --mode none",
+        "watch": "webpack --mode none --watch",
         "postinstall": "node ./node_modules/vscode/bin/install"
     },
     "dependencies": {
@@ -153,9 +154,14 @@
     },
     "devDependencies": {
         "@types/fs-extra": "^5.0.5",
-        "@types/node": "^10.12.30",
-        "typescript": "^3.3.3333",
-        "vsce": "^1.57.1",
-        "vscode": "^1.1.30"
+        "@types/node": "10.x.x",
+        "@types/webpack": "^4.4.26",
+        "ts-loader": "^5.3.3",
+        "ts-node": "^8.0.3",
+        "typescript": "^3.4.1",
+        "vsce": "^1.59.0",
+        "vscode": "^1.1.33",
+        "webpack": "^4.29.6",
+        "webpack-cli": "^3.3.0"
     }
 }

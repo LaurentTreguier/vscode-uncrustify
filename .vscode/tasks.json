@@ -5,10 +5,9 @@
     "tasks": [
         {
             "type": "npm",
-            "script": "compile",
-            "identifier": "build",
+            "script": "watch",
+            "label": "build",
             "isBackground": true,
-            "problemMatcher": "$tsc-watch",
             "group": {
                 "kind": "build",
                 "isDefault": true
