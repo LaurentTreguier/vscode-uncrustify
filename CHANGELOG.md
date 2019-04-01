@@ -1,6 +1,6 @@
 # Changelog
 
-#### 2.14.3
+### 2.15.0
 - Webpack is now used to bundle the extension and reduce its size
 
 #### 2.14.2
