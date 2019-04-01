@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.14.3
+- Webpack is now used to bundle the extension and reduce its size
+
 #### 2.14.2
 - Switched from deprecated `vscode.previewHtml` command to the WebView API (#44)
 
