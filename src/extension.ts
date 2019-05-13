@@ -43,7 +43,7 @@ export function activate(context: vsc.ExtensionContext) {
                     message = 'Uncrustify can be upgraded';
                     return upgradable;
                 })
-                : Promise.resolve(!installed && vsc.workspace.getConfiguration('uncrustify').get<string>('executablePath') === null);
+                : Promise.resolve(!installed && util.executablePath(false) === null);
         }).then(shouldInstall => {
             logger.dbg('should uncrustify be installed: ' + shouldInstall);
             return shouldInstall ? pkg.getInstallers(uncrustify) : null;

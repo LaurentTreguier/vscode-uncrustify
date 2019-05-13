@@ -48,7 +48,6 @@ export function configPath() {
 
     let config = vsc.workspace.getConfiguration('uncrustify', folderUri);
     let p = config.get<string>('configPath' + PLATFORM_SUFFIX)
-        || config.get<string>('configPath')
         || path.join(folderUri.fsPath, CONFIG_FILE_NAME);
 
     p = p.replace(/(%\w+%)|(\$\w+)/g, variable => {
@@ -63,11 +62,10 @@ export function configPath() {
     return p;
 }
 
-export function executablePath() {
+export function executablePath(useDefaultValue: boolean = true) {
     const config = vsc.workspace.getConfiguration('uncrustify');
-    return config.get('executablePath' + PLATFORM_SUFFIX, DEFAULT_PATH)
-        || config.get('executablePath', DEFAULT_PATH)
-        || DEFAULT_PATH;
+    const defValue = useDefaultValue ? DEFAULT_PATH : null;
+    return config.get('executablePath' + PLATFORM_SUFFIX, defValue) || defValue;
 }
 
 export function configUri() {
