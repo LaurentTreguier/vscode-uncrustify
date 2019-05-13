@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.15.1
+- Added possibility to use platform-dependent executable paths (#46)
+
 ### 2.15.0
 - Webpack is now used to bundle the extension and reduce its size
 
@@ -7,7 +10,7 @@
 - Switched from deprecated `vscode.previewHtml` command to the WebView API (#44)
 
 #### 2.14.1
-- Update dependencies (for real)
+- Updated dependencies (for real)
 
 ### 2.14.0
 - Added default Anonymous Apex => Java language mapping (#43)
