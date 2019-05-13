@@ -102,6 +102,33 @@
                     "description": "Path to the uncrustify configuration file",
                     "scope": "resource"
                 },
+                "uncrustify.configPath.linux": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null,
+                    "description": "Path to the uncrustify configuration file (Linux)",
+                    "scope": "resource"
+                },
+                "uncrustify.configPath.osx": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null,
+                    "description": "Path to the uncrustify configuration file (macOS)",
+                    "scope": "resource"
+                },
+                "uncrustify.configPath.windows": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null,
+                    "description": "Path to the uncrustify configuration file (Windows)",
+                    "scope": "resource"
+                },
                 "uncrustify.graphicalConfig": {
                     "type": "boolean",
                     "default": true,

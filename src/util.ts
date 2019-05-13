@@ -22,6 +22,7 @@ const PLATFORM_NAMES = {
     'darwin': '.osx',
     'win32': '.windows'
 };
+const PLATFORM_SUFFIX = PLATFORM_NAMES[process.platform];
 
 export function configPath() {
     let folderUri: vsc.Uri;
@@ -45,8 +46,10 @@ export function configPath() {
         return null;
     }
 
-    let p = vsc.workspace.getConfiguration('uncrustify', folderUri)
-        .get<string>('configPath') || path.join(folderUri.fsPath, CONFIG_FILE_NAME);
+    let config = vsc.workspace.getConfiguration('uncrustify', folderUri);
+    let p = config.get<string>('configPath' + PLATFORM_SUFFIX)
+        || config.get<string>('configPath')
+        || path.join(folderUri.fsPath, CONFIG_FILE_NAME);
 
     p = p.replace(/(%\w+%)|(\$\w+)/g, variable => {
         let end = variable.startsWith('%') ? 2 : 1;
@@ -61,9 +64,8 @@ export function configPath() {
 }
 
 export function executablePath() {
-    let platformSuffix = PLATFORM_NAMES[process.platform];
     const config = vsc.workspace.getConfiguration('uncrustify');
-    return config.get('executablePath' + platformSuffix, DEFAULT_PATH)
+    return config.get('executablePath' + PLATFORM_SUFFIX, DEFAULT_PATH)
         || config.get('executablePath', DEFAULT_PATH)
         || DEFAULT_PATH;
 }
