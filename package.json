@@ -66,6 +66,33 @@
                     "description": "Path to the uncrustify executable",
                     "scope": "window"
                 },
+                "uncrustify.executablePath.linux": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null,
+                    "description": "Path to the uncrustify executable (Linux)",
+                    "scope": "window"
+                },
+                "uncrustify.executablePath.osx": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null,
+                    "description": "Path to the uncrustify executable (macOS)",
+                    "scope": "window"
+                },
+                "uncrustify.executablePath.windows": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null,
+                    "description": "Path to the uncrustify executable (Windows)",
+                    "scope": "window"
+                },
                 "uncrustify.configPath": {
                     "type": [
                         "string",

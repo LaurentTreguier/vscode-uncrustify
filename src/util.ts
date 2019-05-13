@@ -16,6 +16,13 @@ export const MODES = [
     'vala'
 ];
 
+const DEFAULT_PATH = 'uncrustify';
+const PLATFORM_NAMES = {
+    'linux': '.linux',
+    'darwin': '.osx',
+    'win32': '.windows'
+};
+
 export function configPath() {
     let folderUri: vsc.Uri;
     const textEditors = [vsc.window.activeTextEditor];
@@ -54,7 +61,11 @@ export function configPath() {
 }
 
 export function executablePath() {
-    return vsc.workspace.getConfiguration('uncrustify').get('executablePath', 'uncrustify') || 'uncrustify';
+    let platformSuffix = PLATFORM_NAMES[process.platform];
+    const config = vsc.workspace.getConfiguration('uncrustify');
+    return config.get('executablePath' + platformSuffix, DEFAULT_PATH)
+        || config.get('executablePath', DEFAULT_PATH)
+        || DEFAULT_PATH;
 }
 
 export function configUri() {
