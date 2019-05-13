@@ -186,7 +186,7 @@
     },
     "dependencies": {
         "fs-extra": "^8.0.1",
-        "meta-pkg": "^0.7.5"
+        "meta-pkg": "^0.7.6"
     },
     "devDependencies": {
         "@types/fs-extra": "^5.1.0",

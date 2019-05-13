@@ -1,5 +1,8 @@
 # Changelog
 
+### 2.16.0
+- Removed "global" executable and config paths, `uncrustify.executablePath` has been replaced with `uncrustify.executablePath.<platform>` (#47)
+
 #### 2.15.2
 - Added possibility to use platform-dependent config paths (#46)
 
