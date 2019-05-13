@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.15.2
+- Added possibility to use platform-dependent config paths (#46)
+
 #### 2.15.1
 - Added possibility to use platform-dependent executable paths (#46)
 
