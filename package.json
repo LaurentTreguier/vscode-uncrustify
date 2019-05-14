@@ -111,6 +111,12 @@
                     "description": "Path to the uncrustify configuration file (Windows)",
                     "scope": "resource"
                 },
+                "uncrustify.noUpdates": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Toggles update notifications",
+                    "scope": "window"
+                },
                 "uncrustify.graphicalConfig": {
                     "type": "boolean",
                     "default": true,
@@ -120,7 +126,7 @@
                 "uncrustify.debug": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Activates logs for debugging the extension",
+                    "description": "Toggles logging for debugging the extension",
                     "scope": "window"
                 },
                 "uncrustify.langOverrides": {

@@ -14,7 +14,6 @@ export function activate(context: vsc.ExtensionContext) {
     extContext = context;
 
     let message = 'Uncrustify does not seem to be installed';
-    let choices: string[] = [];
     let installerChoices = new Map<string, pkg.Installer>();
     let uncrustify: pkg.Package = {
         name: 'uncrustify',
@@ -40,8 +39,9 @@ export function activate(context: vsc.ExtensionContext) {
             logger.dbg('uncrustify installed: ' + installed);
             return installed
                 ? pkg.isUpgradable(uncrustify).then(upgradable => {
+                    const noUpdates = vsc.workspace.getConfiguration('uncrustify').get('noUpdates', false);
                     message = 'Uncrustify can be upgraded';
-                    return upgradable;
+                    return upgradable && !noUpdates;
                 })
                 : Promise.resolve(!installed && util.executablePath(false) === null);
         }).then(shouldInstall => {
@@ -51,6 +51,8 @@ export function activate(context: vsc.ExtensionContext) {
             logger.dbg('installers found: ' + (installers
                 ? installers.map(i => i.prettyName).join(', ')
                 : 'none'));
+
+            let choices: string[] = [];
 
             if (installers && installers.length) {
                 installers.forEach(installer => {
