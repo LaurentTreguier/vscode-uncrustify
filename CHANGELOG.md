@@ -1,5 +1,8 @@
 # Changelog
 
+### 2.17.0
+- Added option to mute Uncrustify update notifications (#48)
+
 ### 2.16.0
 - Removed "global" executable and config paths, `uncrustify.executablePath` has been replaced with `uncrustify.executablePath.<platform>` (#47)
 
