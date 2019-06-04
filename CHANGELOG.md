@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.17.1
+- Updated dependencies
+
 ### 2.17.0
 - Added option to mute Uncrustify update notifications (#48)
 
