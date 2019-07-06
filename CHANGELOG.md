@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.17.2
+- Updated dependencies
+
 #### 2.17.1
 - Updated dependencies
 
