@@ -72,6 +72,6 @@ export function configUri() {
     return vsc.Uri.parse('uncrustify://configuration');
 };
 
-export function useReplaceOption() {
-    return vsc.workspace.getConfiguration('uncrustify').get('useReplaceOption');
+export function useReplaceOption(uri: vsc.Uri) {
+    return vsc.workspace.getConfiguration('uncrustify', uri).get('useReplaceOption');
 }
