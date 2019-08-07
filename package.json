@@ -195,14 +195,14 @@
     },
     "devDependencies": {
         "@types/fs-extra": "^8.0.0",
-        "@types/node": "^10.14.13",
+        "@types/node": "^10.14.14",
         "@types/vscode": "^1.36.0",
-        "@types/webpack": "^4.32.0",
+        "@types/webpack": "^4.32.1",
         "ts-loader": "^6.0.4",
         "ts-node": "^8.3.0",
         "typescript": "^3.5.3",
         "vsce": "^1.66.0",
-        "webpack": "^4.37.0",
+        "webpack": "^4.39.1",
         "webpack-cli": "^3.3.6"
     }
 }

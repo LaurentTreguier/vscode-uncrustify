@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.17.4
+- Fixed unicode characters being chopped due to bad buffer handing (#51)
+
 #### 2.17.3
 - Updated dependencies
 
