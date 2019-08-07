@@ -59,7 +59,7 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
             }
 
             let args = ['-l', languageMap[document.languageId], '-c', configPath];
-            let output = '';
+            let output = Buffer.alloc(0);
             let error = '';
 
             if (range) {
@@ -85,12 +85,14 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
                 }
             });
 
-            uncrustify.stdout.on('data', data => output += data.toString());
+            uncrustify.stdout.on('data', data => output = Buffer.concat([output, Buffer.from(data)]));
             uncrustify.stdout.on('close', () => {
-                if (output.length) {
+                const outputString = output.toString();
+
+                if (outputString.length) {
                     let lastLine = document.lineCount - 1;
                     let lastCol = document.lineAt(lastLine).text.length;
-                    resolve([new vsc.TextEdit(range || new vsc.Range(0, 0, lastLine, lastCol), output)]);
+                    resolve([new vsc.TextEdit(range || new vsc.Range(0, 0, lastLine, lastCol), outputString)]);
                 }
                 else {
                     reject();
