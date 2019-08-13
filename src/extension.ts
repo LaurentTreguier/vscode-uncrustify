@@ -80,9 +80,9 @@ export function activate(context: vsc.ExtensionContext) {
         });
 
     let formatter = new Formatter();
-    context.subscriptions.push(vsc.languages.registerDocumentFormattingEditProvider(util.MODES, formatter));
-    context.subscriptions.push(vsc.languages.registerDocumentRangeFormattingEditProvider(util.MODES, formatter));
-    context.subscriptions.push(vsc.languages.registerOnTypeFormattingEditProvider(util.MODES, formatter, ';', '}'));
+    context.subscriptions.push(vsc.languages.registerDocumentFormattingEditProvider(util.modes(), formatter));
+    context.subscriptions.push(vsc.languages.registerDocumentRangeFormattingEditProvider(util.modes(), formatter));
+    context.subscriptions.push(vsc.languages.registerOnTypeFormattingEditProvider(util.modes(), formatter, ';', '}'));
     logger.dbg('registered formatter');
 
     let configurator = new Configurator();

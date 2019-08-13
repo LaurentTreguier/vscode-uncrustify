@@ -2,9 +2,8 @@ import * as path from 'path';
 import * as vsc from 'vscode';
 
 export const CONFIG_FILE_NAME = 'uncrustify.cfg';
-export const MODES = [
-    'apex',
-    'apex-anon',
+
+const DEFAULT_MODES = [
     'c',
     'cpp',
     'csharp',
@@ -15,7 +14,6 @@ export const MODES = [
     'pde',
     'vala'
 ];
-
 const DEFAULT_PATH = 'uncrustify';
 const PLATFORM_NAMES = {
     'linux': '.linux',
@@ -23,6 +21,11 @@ const PLATFORM_NAMES = {
     'win32': '.windows'
 };
 const PLATFORM_SUFFIX = PLATFORM_NAMES[process.platform];
+
+export function modes() {
+    const overrides = vsc.workspace.getConfiguration('uncrustify').get<Object>('langOverrides');
+    return DEFAULT_MODES.concat(Object.getOwnPropertyNames(overrides));
+}
 
 export function configPath() {
     let folderUri: vsc.Uri;
