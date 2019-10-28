@@ -32,25 +32,7 @@
         "multi-root ready"
     ],
     "activationEvents": [
-        "onLanguage:apex",
-        "onLanguage:apex-anon",
-        "onLanguage:c",
-        "onLanguage:cpp",
-        "onLanguage:csharp",
-        "onLanguage:d",
-        "onLanguage:java",
-        "onLanguage:objective-c",
-        "onLanguage:pawn",
-        "onLanguage:pde",
-        "onLanguage:vala",
-        "workspaceContains:uncrustify.cfg",
-        "onCommand:uncrustify.create",
-        "onCommand:uncrustify.open",
-        "onCommand:uncrustify.save",
-        "onCommand:uncrustify.savePreset",
-        "onCommand:uncrustify.loadPreset",
-        "onCommand:uncrustify.deletePreset",
-        "onCommand:uncrustify.upgrade"
+        "*"
     ],
     "main": "./out/extension",
     "contributes": {
