@@ -23,7 +23,7 @@ const PLATFORM_NAMES = {
 const PLATFORM_SUFFIX = PLATFORM_NAMES[process.platform];
 
 export function modes() {
-    const overrides = vsc.workspace.getConfiguration('uncrustify').get<Object>('langOverrides');
+    const overrides = vsc.workspace.getConfiguration('uncrustify').get<Object>('langOverrides', {});
     return DEFAULT_MODES.concat(Object.getOwnPropertyNames(overrides));
 }
 

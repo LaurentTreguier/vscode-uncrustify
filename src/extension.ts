@@ -80,10 +80,11 @@ export function activate(context: vsc.ExtensionContext) {
         });
 
     let formatter = new Formatter();
-    context.subscriptions.push(vsc.languages.registerDocumentFormattingEditProvider(util.modes(), formatter));
-    context.subscriptions.push(vsc.languages.registerDocumentRangeFormattingEditProvider(util.modes(), formatter));
-    context.subscriptions.push(vsc.languages.registerOnTypeFormattingEditProvider(util.modes(), formatter, ';', '}'));
-    logger.dbg('registered formatter');
+    const modes = util.modes();
+    context.subscriptions.push(vsc.languages.registerDocumentFormattingEditProvider(modes, formatter));
+    context.subscriptions.push(vsc.languages.registerDocumentRangeFormattingEditProvider(modes, formatter));
+    context.subscriptions.push(vsc.languages.registerOnTypeFormattingEditProvider(modes, formatter, ';', '}'));
+    logger.dbg('registered formatter for modes: ' + modes);
 
     let configurator = new Configurator();
     let configurationSub = vsc.workspace.registerTextDocumentContentProvider('uncrustify', configurator);
