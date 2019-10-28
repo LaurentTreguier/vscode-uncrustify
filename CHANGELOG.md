@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.17.6
+- Fixed extension not being activated when opening files with custom language override
+
 #### 2.17.5
 - Fixed `uncrustify.langOverrides` options not taken into account when setting the formatter modes
 
