@@ -56,8 +56,3 @@ Uncrustify's default config file keeps its version at the top of the file; if th
 ## Changelog
 
 See CHANGELOG.md
-
-## Troubleshooting
-
-* `Format Document` doesn't use Uncrustify when C/C++ extension is installed
-  * In `Settings > Extensions > C/C++`, change `C_Cpp: Formatting` from `Default` to `Disabled`.

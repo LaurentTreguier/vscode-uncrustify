@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.17.7
+- Fixed extension not working without a workspace or directory open (#55)
+
 #### 2.17.6
 - Fixed extension not being activated when opening files with custom language override
 
