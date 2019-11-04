@@ -41,12 +41,10 @@ export function configPath() {
         }
     }
 
-    if (!folderUri && vsc.workspace.workspaceFolders.length > 0) {
-        folderUri = vsc.workspace.workspaceFolders[0].uri;
-    }
+    const workspaces = vsc.workspace.workspaceFolders || [];
 
-    if (!folderUri) {
-        return null;
+    if (!folderUri && workspaces.length > 0) {
+        folderUri = workspaces[0].uri;
     }
 
     let config = vsc.workspace.getConfiguration('uncrustify', folderUri);
