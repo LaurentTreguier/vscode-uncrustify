@@ -51,10 +51,13 @@ export function configPath() {
     let p = config.get<string>('configPath' + PLATFORM_SUFFIX)
         || path.join(folderUri.fsPath, CONFIG_FILE_NAME);
 
-    p = p.replace(/(%\w+%)|(\$\w+)/g, variable => {
-        let end = variable.startsWith('%') ? 2 : 1;
-        return process.env[variable.substr(1, variable.length - end)];
-    });
+    p = p
+        .replace(/(%\w+%)|(\$\w+)/g, variable => {
+            let end = variable.startsWith('%') ? 2 : 1;
+            return process.env[variable.substr(1, variable.length - end)];
+        })
+        .replace(/\$\{workspaceFolder:(.*?)\}/, (_, name) =>
+            vsc.workspace.workspaceFolders.find(wf => wf.name == name).uri.fsPath);
 
     if (!path.isAbsolute(p)) {
         p = path.join(folderUri.fsPath, p);
