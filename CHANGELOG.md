@@ -1,5 +1,8 @@
 # Changelog
 
+### 2.18.0
+- Added possibility to use the `${workspaceFolder:myWorkspaceFolder}` syntax in multi-root workspaces for the config path (#56)
+
 #### 2.17.7
 - Fixed extension not working without a workspace or directory open (#55)
 
