@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.18.1
+- Updated dependencies
+
 ### 2.18.0
 - Added possibility to use the `${workspaceFolder:myWorkspaceFolder}` syntax in multi-root workspaces for the config path (#56)
 
