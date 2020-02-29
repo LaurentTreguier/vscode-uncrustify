@@ -1,5 +1,8 @@
 # Changelog
 
+### 2.19.0
+- Removed automatic Uncrustify installation due to security vulnerability
+
 #### 2.18.2
 - Updated dependencies
 

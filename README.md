@@ -13,13 +13,10 @@ Supported languages are :
 - Pawn
 - Vala
 
-Apex, while not officially supported by uncrustify, is also supported by the extension and will be formatted as if it was Java.
+Apex, while not officially supported by uncrustify, is also partially supported by the extension and will be formatted as if it was Java.
 
 ## Installing uncrustify
 
-On most Linux distributions, macOS (if brew is installed) and Windows, uncrustify can be installed by the extension automatically.
-
-If you want or have to install it yourself :
 - Linux : Uncrustify is available in most distributions as a package in the official repositories (`sudo apt/yum install uncrustify` or equivalent)
 - macOS : Uncrustify is available through Homebrew (`brew install uncrustify` or see http://macappstore.org/uncrustify)
 - Windows : Prebuilt binaries are available on [sourceforge](https://sourceforge.net/projects/uncrustify/files). You will need to put the executable in your `PATH` variable and you will have to update it manually
