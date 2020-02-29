@@ -172,8 +172,7 @@
         "watch": "webpack --mode none --watch"
     },
     "dependencies": {
-        "fs-extra": "^8.1.0",
-        "meta-pkg": "^0.7.7"
+        "fs-extra": "^8.1.0"
     },
     "devDependencies": {
         "@types/fs-extra": "^8.0.1",

@@ -1,7 +1,6 @@
 import * as fs from 'fs-extra';
 import * as cp from 'child_process';
 import * as vsc from 'vscode';
-import * as pkg from 'meta-pkg';
 import * as logger from './logger';
 import * as util from './util';
 import Formatter from './formatter';
@@ -12,72 +11,6 @@ let extContext: vsc.ExtensionContext;
 export function activate(context: vsc.ExtensionContext) {
     logger.dbg('extension started');
     extContext = context;
-
-    let message = 'Uncrustify does not seem to be installed';
-    let installerChoices = new Map<string, pkg.Installer>();
-    let uncrustify: pkg.Package = {
-        name: 'uncrustify',
-        targets: ['uncrustify'],
-        backends: {
-            packagekit: 'uncrustify',
-            brew: 'uncrustify',
-            fallback: {
-                win32: {
-                    source: 'http://downloads.sourceforge.net/project/uncrustify/uncrustify/uncrustify-%VERSION%/uncrustify-%VERSION%-win64.zip',
-                    version: {
-                        feed: 'https://sourceforge.net/projects/uncrustify/rss?path=/',
-                        regexp: /uncrustify\/uncrustify-([\d.]+)\/uncrustify-\1-win64\.zip/
-                    },
-                    bin: '.'
-                }
-            }
-        }
-    };
-
-    pkg.isInstalled(uncrustify)
-        .then(installed => {
-            logger.dbg('uncrustify installed: ' + installed);
-            return installed
-                ? pkg.isUpgradable(uncrustify).then(upgradable => {
-                    const noUpdates = vsc.workspace.getConfiguration('uncrustify').get('noUpdates', false);
-                    message = 'Uncrustify can be upgraded';
-                    return upgradable && !noUpdates;
-                })
-                : Promise.resolve(!installed && util.executablePath(false) === null);
-        }).then(shouldInstall => {
-            logger.dbg('should uncrustify be installed: ' + shouldInstall);
-            return shouldInstall ? pkg.getInstallers(uncrustify) : null;
-        }).then(installers => {
-            logger.dbg('installers found: ' + (installers
-                ? installers.map(i => i.prettyName).join(', ')
-                : 'none'));
-
-            let choices: string[] = [];
-
-            if (installers && installers.length) {
-                installers.forEach(installer => {
-                    let choice = 'Install using ' + installer.prettyName;
-                    choices.push(choice);
-                    installerChoices.set(choice, installer);
-                });
-
-                return <PromiseLike<string>>vsc.window.showWarningMessage(message, ...choices).then((choice) => choice);
-            }
-        }).then(async choice => {
-            logger.dbg('installer choice: ' + choice);
-
-            if (choice) {
-                logger.show();
-                const alreadyInstalled = await installerChoices.get(choice)
-                    .install(data => logger.log(data, false));
-                return !alreadyInstalled;
-            }
-        }).then(didIntall => {
-            if (didIntall) {
-                logger.dbg('uncrustify installed');
-                vsc.window.showInformationMessage('Uncrustify installed successfully');
-            }
-        });
 
     let formatter = new Formatter();
     const modes = util.modes();
