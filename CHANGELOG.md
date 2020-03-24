@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.19.2
+- Updated dependencies
+
 #### 2.19.1
 - Updated dependencies
 
