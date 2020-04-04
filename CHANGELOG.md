@@ -1,5 +1,9 @@
 # Changelog
 
+### 2.20.0
+- Added option to use a temprary file instead of feeding uncrustify text via stdin (#60)
+- Updated dependencies
+
 #### 2.19.2
 - Updated dependencies
 
