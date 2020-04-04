@@ -37,7 +37,7 @@
     "main": "./out/extension",
     "contributes": {
         "configuration": {
-            "title": "Uncrustify configuration",
+            "title": "Uncrustify",
             "properties": {
                 "uncrustify.executablePath.linux": {
                     "type": [
@@ -92,12 +92,6 @@
                     "default": null,
                     "description": "Path to the uncrustify configuration file (Windows)",
                     "scope": "resource"
-                },
-                "uncrustify.noUpdates": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Toggles update notifications",
-                    "scope": "window"
                 },
                 "uncrustify.graphicalConfig": {
                     "type": "boolean",
