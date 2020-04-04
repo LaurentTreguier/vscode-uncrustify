@@ -1,12 +1,20 @@
-import * as fs from 'fs'
-import * as cp from 'child_process'
+import * as fs from 'fs';
+import * as path from 'path';
+import * as cp from 'child_process';
+import * as u from 'util';
+import * as temp from 'temp';
 import * as vsc from 'vscode';
 import * as logger from './logger';
 import * as util from './util';
 
+temp.track();
+
 export default class Formatter implements vsc.DocumentFormattingEditProvider,
     vsc.DocumentRangeFormattingEditProvider,
     vsc.OnTypeFormattingEditProvider {
+    private tempDir: string = null
+    private tempFileName: string = null
+
     public provideDocumentFormattingEdits(
         document: vsc.TextDocument,
         options: vsc.FormattingOptions,
@@ -39,7 +47,21 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
         options: vsc.FormattingOptions,
         token: vsc.CancellationToken
     ): Promise<vsc.TextEdit[]> {
-        if (util.useReplaceOption(document.uri)) {
+        const configuration = vsc.workspace.getConfiguration("uncrustify", document.uri);
+        const useTempFile = configuration.get('useTempFile');
+        const useReplaceOption = configuration.get('useReplaceOption');
+        const useDirectFile = useTempFile || useReplaceOption;
+
+        if (useTempFile) {
+            if (this.tempDir == null) {
+                this.tempDir = await u.promisify(temp.mkdir)(vsc.env.appName + '.' + "uncrustify");
+                logger.dbg('temporary directory: ' + this.tempDir);
+            }
+
+            this.tempFileName = path.join(this.tempDir, path.basename(document.fileName));
+            logger.dbg('temporary file: ' + this.tempFileName);
+            await u.promisify(fs.writeFile)(this.tempFileName, document.getText());
+        } else if (useReplaceOption) {
             await document.save();
         }
 
@@ -67,45 +89,50 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
             }
 
             // This option helps you if the document saved as UTF8 with BOM, though not able to format it partially.
-            if (util.useReplaceOption(document.uri)) {
+            if (useDirectFile) {
                 args.push('--replace');
                 args.push('--no-backup');
-                args.push(document.fileName);
+                args.push(useTempFile ? this.tempFileName : document.fileName);
             }
 
             let uncrustify = cp.spawn(util.executablePath(), args);
             logger.dbg(`launched: ${util.executablePath()} ${args.join(' ')}`);
 
             uncrustify.on('error', reject);
-            uncrustify.on('exit', code => {
+            uncrustify.on('exit', async code => {
                 logger.dbg('uncrustify exited with status: ' + code);
+
                 if (code < 0) {
                     vsc.window.showErrorMessage('Uncrustify exited with error code: ' + code);
                     reject(code);
+                } else if (useTempFile) {
+                    const result = await u.promisify(fs.readFile)(this.tempFileName);
+                    resolve([new vsc.TextEdit(this.getRange(document, range), result.toString())]);
+                } else if (useReplaceOption) {
+                    resolve();
                 }
             });
 
             uncrustify.stdout.on('data', data => output = Buffer.concat([output, Buffer.from(data)]));
             uncrustify.stdout.on('close', () => {
-                const outputString = output.toString();
-
-                if (outputString.length) {
-                    let lastLine = document.lineCount - 1;
-                    let lastCol = document.lineAt(lastLine).text.length;
-                    resolve([new vsc.TextEdit(range || new vsc.Range(0, 0, lastLine, lastCol), outputString)]);
-                }
-                else {
-                    reject();
+                if (!useDirectFile) {
+                    resolve([new vsc.TextEdit(this.getRange(document, range), output.toString())]);
                 }
             });
 
             uncrustify.stderr.on('data', data => error += data.toString());
             uncrustify.stderr.on('close', () => logger.dbg('uncrustify exited with error: ' + error));
 
-            if (!util.useReplaceOption(document.uri)) {
+            if (!useDirectFile) {
                 uncrustify.stdin.end(document.getText(range));
             }
         });
+    }
+
+    private getRange(document: vsc.TextDocument, range: vsc.Range): vsc.Range {
+        let lastLine = document.lineCount - 1;
+        let lastCol = document.lineAt(lastLine).text.length;
+        return range || new vsc.Range(0, 0, lastLine, lastCol);
     }
 };
 

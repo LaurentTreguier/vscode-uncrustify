@@ -120,10 +120,16 @@
                     "description": "Overrides default language settings for uncrustify. Can be used to support languages not officially supported",
                     "scope": "window"
                 },
+                "uncrustify.useTempFile": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Uses a temporary file to bypass VSCode's document handling",
+                    "scope": "resource"
+                },
                 "uncrustify.useReplaceOption": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Use the --replace option from uncrustify to bypass VSCode's document handling",
+                    "description": "Uses the --replace option from uncrustify to bypass VSCode's document handling",
                     "scope": "resource"
                 }
             }
@@ -173,11 +179,13 @@
     },
     "dependencies": {
         "fs-extra": "^9.0.0",
-        "node": "^12.16.1"
+        "node": "^12.16.1",
+        "temp": "^0.9.1"
     },
     "devDependencies": {
         "@types/fs-extra": "^8.1.0",
         "@types/node": "^12.12.30",
+        "@types/temp": "^0.8.34",
         "@types/vscode": "^1.43.0",
         "@types/webpack": "^4.41.8",
         "ts-loader": "^6.2.2",
