@@ -180,6 +180,7 @@ export function activate(context: vsc.ExtensionContext) {
                             { enableCommandUris: true, enableScripts: true }
                         );
 
+                        configurator.webview = webviewPanel.webview;
                         webviewPanel.webview.html = await configurator.provideTextDocumentContent(util.configUri(), null);
                     });
             }

@@ -17,6 +17,7 @@ const typesMap = {
 
 export default class Configurator implements vsc.TextDocumentContentProvider {
     static oldConfig: any;
+    webview: vsc.Webview;
 
     async provideTextDocumentContent(uri: vsc.Uri, token: vsc.CancellationToken) {
         const config = await new Promise<string>(resolve => fs.readFile(util.configPath(), (err, data) => resolve(data.toString())));
@@ -29,7 +30,8 @@ export default class Configurator implements vsc.TextDocumentContentProvider {
         let resourcePath = path.join(ext.extContext.extensionPath, 'editor');
         let html = new Node('html');
         let head = new Node('head');
-        let style = new Node('link', { rel: 'stylesheet', href: vsc.Uri.file(path.join(resourcePath, 'uncrustify.css')).with(resScheme) }, true);
+        const styleLink = this.webview.asWebviewUri(vsc.Uri.file(path.join(resourcePath, 'uncrustify.css')));
+        let style = new Node('link', { rel: 'stylesheet', href: styleLink }, true);
         let body = new Node('body');
         let actions = new Node('div', { id: 'actions' });
         let searchForm = new Node('form', { id: 'searchForm' });
@@ -39,7 +41,8 @@ export default class Configurator implements vsc.TextDocumentContentProvider {
         let upgrade = new Node('h3', { _: 'UPGRADE CONFIG', onclick: `action('upgrade')` });
         let form = new Node('form');
         let a = new Node('a', { id: 'a', display: 'none' });
-        let script = new Node('script', { src: vsc.Uri.file(path.join(resourcePath, 'uncrustify.js')).with(resScheme) });
+        const scriptLink = this.webview.asWebviewUri(vsc.Uri.file(path.join(resourcePath, 'uncrustify.js')));
+        let script = new Node('script', { src: scriptLink });
 
         html.children.push(head, body);
         head.children.push(style);
