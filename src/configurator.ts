@@ -26,22 +26,22 @@ export default class Configurator implements vsc.TextDocumentContentProvider {
 
         logger.dbg('generating HTML');
 
-        let resourcePath = path.join(ext.extContext.extensionPath, 'editor');
-        let html = new Node('html');
-        let head = new Node('head');
+        const resourcePath = path.join(ext.extContext.extensionPath, 'editor');
+        const html = new Node('html');
+        const head = new Node('head');
         const styleLink = this.webview.asWebviewUri(vsc.Uri.file(path.join(resourcePath, 'uncrustify.css')));
-        let style = new Node('link', { rel: 'stylesheet', href: styleLink }, true);
-        let body = new Node('body');
-        let actions = new Node('div', { id: 'actions' });
-        let searchForm = new Node('form', { id: 'searchForm' });
-        let search = new Node('input', { id: 'search', type: 'text', placeholder: 'Search...' }, true);
-        let save = new Node('h3', { _: 'SAVE', onclick: `action('save')` });
-        let savePreset = new Node('h3', { _: 'SAVE PRESET', onclick: `action('savePreset')` });
-        let upgrade = new Node('h3', { _: 'UPGRADE CONFIG', onclick: `action('upgrade')` });
-        let form = new Node('form');
-        let a = new Node('a', { id: 'a', display: 'none' });
+        const style = new Node('link', { rel: 'stylesheet', href: styleLink }, true);
+        const body = new Node('body');
+        const actions = new Node('div', { id: 'actions' });
+        const searchForm = new Node('form', { id: 'searchForm' });
+        const search = new Node('input', { id: 'search', type: 'text', placeholder: 'Search...' }, true);
+        const save = new Node('h3', { _: 'SAVE', onclick: `action('save')` });
+        const savePreset = new Node('h3', { _: 'SAVE PRESET', onclick: `action('savePreset')` });
+        const upgrade = new Node('h3', { _: 'UPGRADE CONFIG', onclick: `action('upgrade')` });
+        const form = new Node('form');
+        const a = new Node('a', { id: 'a', display: 'none' });
         const scriptLink = this.webview.asWebviewUri(vsc.Uri.file(path.join(resourcePath, 'uncrustify.js')));
-        let script = new Node('script', { src: scriptLink });
+        const script = new Node('script', { src: scriptLink });
 
         html.children.push(head, body);
         head.children.push(style);
