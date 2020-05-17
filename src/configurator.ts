@@ -23,7 +23,6 @@ export default class Configurator implements vsc.TextDocumentContentProvider {
         const config = await new Promise<string>(resolve => fs.readFile(util.configPath(), (err, data) => resolve(data.toString())));
         const rightVersion = await checkVersion(config);
         const result = { config: config, rightVersion: rightVersion };
-        const resScheme = { scheme: 'vscode-resource' };
 
         logger.dbg('generating HTML');
 
