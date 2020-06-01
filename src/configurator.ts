@@ -22,7 +22,6 @@ export default class Configurator implements vsc.TextDocumentContentProvider {
     async provideTextDocumentContent(uri: vsc.Uri, token: vsc.CancellationToken) {
         const config = await new Promise<string>(resolve => fs.readFile(util.configPath(), (err, data) => resolve(data.toString())));
         const rightVersion = await checkVersion(config);
-        const result = { config: config, rightVersion: rightVersion };
 
         logger.dbg('generating HTML');
 
@@ -48,9 +47,9 @@ export default class Configurator implements vsc.TextDocumentContentProvider {
         body.children.push(actions, form, a, script);
         actions.children.push(searchForm, save, savePreset);
         searchForm.children.push(search);
-        form.children = parseConfig(result.config);
+        form.children = parseConfig(config);
 
-        if (!result.rightVersion) {
+        if (!rightVersion) {
             actions.children.push(upgrade);
         }
 
