@@ -97,7 +97,7 @@ class Node {
 }
 
 function extractVersion(line: string) {
-    let match = line.match(/\buncrustify(?:\s+|-)(\S+)/i);
+    let match = line.match(/\buncrustify[^\d]+(\d+\.\d+\.\d+)/i);
     return match ? match[1] : '0';
 }
 
