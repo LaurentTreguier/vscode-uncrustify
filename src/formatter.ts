@@ -95,7 +95,8 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
                 args.push(useTempFile ? this.tempFileName : document.fileName);
             }
 
-            let uncrustify = cp.spawn(util.executablePath(), args);
+            const uncrustify = cp.spawn(util.executablePath(), args);
+            const text = document.getText(range);
             logger.dbg(`launched: ${util.executablePath()} ${args.join(' ')}`);
 
             uncrustify.on('error', reject);
@@ -115,8 +116,10 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
 
             uncrustify.stdout.on('data', data => output = Buffer.concat([output, Buffer.from(data)]));
             uncrustify.stdout.on('close', () => {
-                if (!useDirectFile) {
-                    resolve([new vsc.TextEdit(this.getRange(document, range), output.toString())]);
+                const result = output.toString();
+
+                if (!useDirectFile && (result.length > 0 || text.length == 0)) {
+                    resolve([new vsc.TextEdit(this.getRange(document, range), result)]);
                 }
             });
 
@@ -124,7 +127,7 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
             uncrustify.stderr.on('close', () => logger.dbg('uncrustify exited with error: ' + error));
 
             if (!useDirectFile) {
-                uncrustify.stdin.end(document.getText(range));
+                uncrustify.stdin.end(text);
             }
         });
     }
