@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.20.3
+- Fixed code being removed if incorrect (#66)
+
 #### 2.20.2
 - Fixed configuration files upgradability detection
 - Updated dependencies
