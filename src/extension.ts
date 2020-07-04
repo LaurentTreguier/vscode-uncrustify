@@ -40,7 +40,8 @@ export function activate(context: vsc.ExtensionContext) {
                         throw error;
                     }
                 })
-            ).catch(e => {
+            )
+            .catch(e => {
                 if (e === error) {
                     throw e;
                 } else {
@@ -52,7 +53,14 @@ export function activate(context: vsc.ExtensionContext) {
                     .stdout
                     .on('data', data => output += data.toString())
                     .on('end', () => resolve(output.replace(/\?\?\?:.*/g, '')))
-            )).then(config => fs.writeFile(util.configPath(), config))
+            ))
+            .then((config: string) => {
+                if (config.length > 0) {
+                    fs.writeFile(util.configPath(), config);
+                } else {
+                    vsc.window.showErrorMessage('Configuration could not be created; is Uncrustify correctly installed and configured?');
+                }
+            })
             .catch(reason => logger.dbg(reason));
     });
 
