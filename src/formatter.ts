@@ -118,7 +118,9 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
             uncrustify.stdout.on('close', () => {
                 const result = output.toString();
 
-                if (!useDirectFile && (result.length > 0 || text.length == 0)) {
+                if (result.length == 0 && text.length > 0) {
+                    reject();
+                } else if (!useDirectFile) {
                     resolve([new vsc.TextEdit(this.getRange(document, range), result)]);
                 }
             });
