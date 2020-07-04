@@ -1,5 +1,8 @@
 # Changelog
 
+#### 2.20.4
+- Fixed empty configuration file being created on error (#67)
+
 #### 2.20.3
 - Fixed code being removed if incorrect (#66)
 
