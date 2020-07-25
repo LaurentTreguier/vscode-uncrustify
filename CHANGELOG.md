@@ -1,5 +1,9 @@
 # Changelog
 
+#### 2.20.6
+- Fixed formatting with `uncrustify.useTempFile` option (#68)
+- Updated dependencies
+
 #### 2.20.5
 - Updated dependencies
 
