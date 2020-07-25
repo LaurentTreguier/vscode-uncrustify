@@ -116,11 +116,15 @@ export default class Formatter implements vsc.DocumentFormattingEditProvider,
 
             uncrustify.stdout.on('data', data => output = Buffer.concat([output, Buffer.from(data)]));
             uncrustify.stdout.on('close', () => {
+                if (useDirectFile) {
+                    return
+                }
+
                 const result = output.toString();
 
                 if (result.length == 0 && text.length > 0) {
                     reject();
-                } else if (!useDirectFile) {
+                } else {
                     resolve([new vsc.TextEdit(this.getRange(document, range), result)]);
                 }
             });
